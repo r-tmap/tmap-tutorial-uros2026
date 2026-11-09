@@ -206,7 +206,7 @@ ci_scale = tm_scale_intervals(breaks = c(0, 3, 5, 9, 40), values = c(0, 0.35, 0.
 							  labels = c("< 3", "3 - 5", "5 - 9", "> 9"))
 ci_legend = tm_legend_cross("fill", xlab = health_title, ylab = "Width of 95% interval")
 
-h3d = opt_tm_polygons_3d(height.max = "8%")
+h3d = opt_tm_polygons_3d(height.max = "16%")
 credits_health = tm_credits("Data: Gezondheidsmonitor Volwassenen en Ouderen 2024 (GGDs, CBS, RIVM);\ndistrict boundaries: CBS, Kadaster")
 
 # The textures are best seen when zoomed in: 2b and 2c start in the Randstad

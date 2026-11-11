@@ -3,3 +3,38 @@
 .RData
 .Ruserdata
 data/global_pop_2025_1km.tif
+Rplots.pdf
+
+# data: downloaded or derived by prepare_data.R / talk_examples.R (only NLD_health_wijk.rds is committed)
+data/*
+!data/NLD_health_wijk.rds
+
+# old version of the talk and its scripts
+talk_3d.qmd
+talk_3d.html
+talk_3d_files/
+make_maps.R
+health_patterns.R
+health_terrain.R
+health_terrain_pattern.R
+proto_patterns.R
+screenshot_hover.mjs
+
+# maps that are not used by the slides (old talk, prototypes, screenshot source)
+maps/europe.html
+maps/paris.html
+maps/nld_districts.html
+maps/nld_poverty.html
+maps/rotterdam*.html
+maps/terrain_*.html
+maps/proto_*.html
+maps/pat/
+maps/europe_hitbox.html
+
+# figures: only those used by the slides
+figures/*
+!figures/cbs_logo_en.svg
+!figures/europe_hitbox.png
+!figures/cbf_okabe.jpg
+!figures/cols4all2.jpg
+!figures/lgotm.png

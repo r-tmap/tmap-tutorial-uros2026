@@ -5,7 +5,7 @@ Materials for [uRos2026](https://urosconf.org), Paris, 18–20 November 2026.
 | | Session | When | Files |
 |---|---|---|---|
 | Tutorial | *Mapping Official Statistics with the tmapverse and cols4all* | Wed 18 Nov, 11:00–12:30, Room 2 | `tutorial.qmd`, `exercises.R`, `solutions.R` |
-| Talk | *3D Thematic Mapping in R with tmap v4 and tmap.mapgl* (A5, Spatial and Small Area Analysis) | Fri 20 Nov, 13:45–15:15, Room 1 | `talk_3d.qmd` |
+| Talk | *3D Thematic Mapping in R with tmap v4 and tmap.mapgl* (A5, Spatial and Small Area Analysis) | Fri 20 Nov, 13:45–15:15, Room 1 | `talk.qmd` |
 
 ## Setup
 
@@ -27,18 +27,20 @@ All data used ship with **tmap** (`NLD_prov`, `NLD_muni`, `NLD_dist`, `World`): 
 
 ```sh
 quarto render tutorial.qmd
-quarto render talk_3d.qmd
+quarto render talk.qmd
 ```
 
-The live maps in `talk_3d.qmd` are separate HTML files in `maps/`, embedded as iframes (loaded when the slide is shown; basemaps need internet). Screenshots for offline use / handouts: `figures/*_3d.png`. To rebuild them:
+The live maps in `talk.qmd` are separate HTML files in `maps/`, embedded as iframes (loaded when the slide is shown; basemaps need internet). They require the development versions of tmap and tmap.mapgl (`remotes::install_github(c("r-tmap/tmap", "r-tmap/tmap.mapgl"))`). To rebuild them:
 
 ```sh
-Rscript prepare_data.R   # downloads CBS/RIVM small area estimates + neighbourhood polygons, WorldPop (~280 MB) -> data/
-Rscript make_maps.R      # maps/*.html and figures/nld_uncertainty.png (needs dev tmap + tmap.mapgl)
-node screenshot.mjs file://$PWD/maps/europe.html figures/europe_3d.png   # headless Chrome screenshot
+Rscript prepare_data.R    # downloads WorldPop (~280 MB) and the CBS/RIVM health estimates + district polygons -> data/
+Rscript talk_toy_maps.R   # maps/toy_*.html: the toy maps (view, maplibre, 3D)
+Rscript talk_examples.R   # maps/world_globe.html, europe_10km.html, nld_health*.html: the applications
+Rscript talk_hitbox.R     # maps/europe_hitbox.html: map 1b with the hover areas made visible, for a screenshot:
+node screenshot.mjs file://$PWD/maps/europe_hitbox.html figures/europe_hitbox.png 15000 1000 650
 ```
 
-Talk data: WorldPop 2025 1 km (CC BY 4.0); RIVM/CBS *Gezondheid per wijk en buurt 2024* (StatLine table 50150NED, model-based estimates with 95% intervals); CBS Wijk- en buurtkaart 2024 (PDOK).
+Talk data: WorldPop 2025 1 km (CC BY 4.0); Health Monitor Adults and Elderly 2024 (GGDs, CBS, RIVM; model-based estimates per district with 95% intervals); CBS Wijk- en buurtkaart 2024 (PDOK).
 
 ## Sources
 

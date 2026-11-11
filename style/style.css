@@ -1,0 +1,164 @@
+/* style.css */
+
+/* ── Bordered table variant ─────────────────────────────────────────────── */
+.bordered-table-slide table {
+    border-collapse: collapse;
+    width: 100%;
+    border: 1px solid black;
+}
+.bordered-table-slide td {
+    border: 1px solid black !important;
+    padding: 8px;
+}
+.bordered-table-slide tr:first-child td {
+    font-weight: bold !important;
+}
+
+/* ── Smaller body text helper ───────────────────────────────────────────── */
+.smaller-body {
+  font-size: 0.7em;
+}
+
+/* ── Logo: right-aligned on the title slide ─────────────────────────────── */
+#title-slide .slide-logo {
+  left: unset !important;
+  right: 10px !important;
+}
+
+/* ── Image height constraint ────────────────────────────────────────────── */
+/*
+   For standalone figure slides, use {.r-stretch} on the image in the QMD
+   file — that is the correct Reveal.js mechanism (see below).
+   This rule only guards against runaway images on other slides.
+*/
+.reveal .slides section img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ── Labels under maps ('constant', 'data variable') ──────────────────── */
+.reveal .columns .quarto-figure {
+  margin-bottom: 0;
+}
+.reveal .map-label {
+  text-align: center;
+  font-size: 0.8em;
+}
+.reveal .map-label p {
+  margin: 0;
+}
+.reveal table.map-label-table {
+  margin: 0 auto;
+  font-size: 0.8em;
+  border: none;
+}
+.reveal table.map-label-table td {
+  border: none;
+  padding: 0 0.25em;
+  line-height: 1.3;
+}
+.reveal table.map-label-table td:first-child {
+  text-align: right;
+}
+
+/* ── Extension packages overview ────────────────────────────────────────── */
+.ext-grid {
+  display: grid;
+  grid-template-columns: 0.85fr 1.3fr 1fr;
+  margin-left: -40px; margin-right: -40px;
+  gap: 22px;
+  margin-top: 30px;
+  align-items: start;
+}
+.ext-box {
+  position: relative;
+  border: 2px solid #bbb;
+  border-radius: 12px;
+  background: #f4f4f4;
+  color: #777;
+  padding: 18px 16px 14px;
+  font-size: 0.8em;
+}
+.ext-box.ext-highlight {
+  border: 5px solid #107895;
+  background: #e7f3f6;
+  color: #131516;
+}
+.ext-badge {
+  position: absolute;
+  top: -18px;
+  right: 14px;
+  background: #9a2515;
+  color: white;
+  border-radius: 16px;
+  padding: 2px 14px;
+  font-size: 0.9em;
+}
+.ext-head {
+  font-size: 1.5em;
+  text-align: center;
+  margin-bottom: 10px;
+}
+.ext-highlight .ext-head {
+  color: #107895;
+}
+.reveal .ext-box table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0;
+}
+.reveal .ext-box td {
+  border: none;
+  border-top: 1px solid #ccc;
+  padding: 6px 4px;
+  vertical-align: top;
+  line-height: 1.35;
+}
+.reveal .ext-box tr:first-child td {
+  border-top: none;
+}
+.reveal .ext-box td.pkg {
+  font-family: monospace;
+  font-weight: bold;
+  white-space: nowrap;
+}
+.reveal .ext-box code {
+  color: inherit;
+  background: none;
+}
+.reveal .ext-box tr.ext-this td {
+  color: #107895;
+}
+
+/* ── Map variables of a use case ────────────────────────────────────────── */
+.reveal table.mapvars {
+  margin: 1em 0 0 0;
+  border: none;
+}
+.reveal table.mapvars td {
+  border: none;
+  padding: 0 0.3em;
+  vertical-align: top;
+}
+
+/* no table rules from the theme in these layout tables */
+.reveal table.map-label-table tr, .reveal table.map-label-table td,
+.reveal table.mapvars tr, .reveal table.mapvars td,
+.reveal .ext-box table tr {
+  border-bottom: none !important;
+}
+.reveal table.map-label-table { margin-top: -0.2em; line-height: 1.2; }
+
+/* caption directly under a full-width map */
+.reveal iframe + p:has(> .smaller-body) {
+  margin-top: 4px;
+}
+.reveal .ext-box table, .reveal .ext-box td { border-bottom: none !important; }
+.ext-head { font-size: 1.3em; white-space: nowrap; }
+
+/* whitespace instead of a separator between parts of a caption */
+.gap {
+  margin-left: 2.5em;
+  white-space: nowrap;
+  display: inline-block;
+}

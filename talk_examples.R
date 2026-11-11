@@ -128,7 +128,7 @@ cities$name[cities$name == "Piraieus"] = "Piraeus"
 uc = urban_centres(pop_eu1, cities)
 
 # Per city: the population of its (part of the) urban centre, and the peak density, i.e. the highest 10 km cell
-# of the map. Only the cities with at least 250,000 inhabitants.
+# of the map. Only the cities with at least 100,000 inhabitants (urban centre).
 uc$dens10 = values(pop_eu$dens)[cellFromXY(pop_eu, xyFromCell(pop_eu1, uc$cell)), 1]
 towns = data.frame(city = sort(unique(uc$city)))
 towns$name = uc$name[match(towns$city, uc$city)]

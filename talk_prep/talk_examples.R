@@ -9,9 +9,9 @@
 #      2c. + texture "sketch": idem, attached to the map (it is enlarged when zooming in)
 #
 # The maps are saved to maps/*.html (to embed as <iframe> in the slides). Screenshots (figures/ex_*.png)
-# are made with: node screenshot.mjs file://$PWD/maps/<name>.html figures/ex_<name>.png
+# are made with: node talk_prep/screenshot.mjs file://$PWD/maps/<name>.html figures/ex_<name>.png
 #
-# Data: data/global_pop_2025_1km.tif and data/NLD_health_wijk.rds, made by prepare_data.R
+# Data: data/global_pop_2025_1km.tif and data/NLD_health_wijk.rds, made by talk_prep/prepare_data.R
 # Requires the development versions of tmap and tmap.mapgl (textures "mottle" and "sketch", and
 # tm_maplibre(pattern.zoom)):
 # remotes::install_github(c("r-tmap/tmap", "r-tmap/tmap.mapgl"))

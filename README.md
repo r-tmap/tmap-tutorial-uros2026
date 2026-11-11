@@ -30,14 +30,14 @@ quarto render tutorial.qmd
 quarto render talk.qmd
 ```
 
-The live maps in `talk.qmd` are separate HTML files in `maps/`, embedded as iframes (loaded when the slide is shown; basemaps need internet). They require the development versions of tmap and tmap.mapgl (`remotes::install_github(c("r-tmap/tmap", "r-tmap/tmap.mapgl"))`). To rebuild them:
+The live maps in `talk.qmd` are separate HTML files in `maps/`, embedded as iframes (loaded when the slide is shown; basemaps need internet). They require the development versions of tmap and tmap.mapgl (`remotes::install_github(c("r-tmap/tmap", "r-tmap/tmap.mapgl"))`). The scripts to rebuild them are in `talk_prep/`; run them from the project root:
 
 ```sh
-Rscript prepare_data.R    # downloads WorldPop (~280 MB) and the CBS/RIVM health estimates + district polygons -> data/
-Rscript talk_toy_maps.R   # maps/toy_*.html: the toy maps (view, maplibre, 3D)
-Rscript talk_examples.R   # maps/world_globe.html, europe_10km.html, nld_health*.html: the applications
-Rscript talk_hitbox.R     # maps/europe_hitbox.html: map 1b with the hover areas made visible, for a screenshot:
-node screenshot.mjs file://$PWD/maps/europe_hitbox.html figures/europe_hitbox.png 15000 1000 650
+Rscript talk_prep/prepare_data.R    # downloads WorldPop (~280 MB) and the CBS/RIVM health estimates + district polygons -> data/
+Rscript talk_prep/talk_toy_maps.R   # maps/toy_*.html: the toy maps (view, maplibre, 3D)
+Rscript talk_prep/talk_examples.R   # maps/world_globe.html, europe_10km.html, nld_health*.html: the applications
+Rscript talk_prep/talk_hitbox.R     # maps/europe_hitbox.html: map 1b with the hover areas made visible, for a screenshot:
+node talk_prep/screenshot.mjs file://$PWD/maps/europe_hitbox.html figures/europe_hitbox.png 15000 1000 650
 ```
 
 Talk data: WorldPop 2025 1 km (CC BY 4.0); Health Monitor Adults and Elderly 2024 (GGDs, CBS, RIVM; model-based estimates per district with 95% intervals); CBS Wijk- en buurtkaart 2024 (PDOK).

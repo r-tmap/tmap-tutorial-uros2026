@@ -38,3 +38,6 @@ figures/*
 !figures/cbf_okabe.jpg
 !figures/cols4all2.jpg
 !figures/lgotm.png
+
+# local files that are not on GitHub
+local/

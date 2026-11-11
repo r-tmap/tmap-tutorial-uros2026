@@ -40,8 +40,8 @@ legend_topleft = tm_layout(legend.position = tm_pos_in("left", "top"))
 NLD_muni$pop_dens = NLD_muni$population / as.numeric(NLD_muni$area)   # per km2
 ```
 
-<!-- Live maps: maps/toy_*.html (talk_toy_maps.R) and maps/world_globe.html, europe_10km.html,
-     nld_health*.html (talk_examples.R). Embedded as iframes, loaded when the slide is shown.
+<!-- Live maps: maps/toy_*.html (talk_prep/talk_toy_maps.R) and maps/world_globe.html, europe_10km.html,
+     nld_health*.html (talk_prep/talk_examples.R). Embedded as iframes, loaded when the slide is shown.
      Basemaps need an internet connection. -->
 
 # tmap in 1 minute

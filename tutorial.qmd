@@ -115,7 +115,7 @@ tm_shape(NLD_muni) +                         # shape: the spatial data
 tm_shape(NLD_prov) +                         # a second shape
   tm_borders(lwd = 2) +                      # its layer
 tm_title("Higher education per municipality, 2022") +
-tm_credits("Source: Statistics Netherlands (CBS)")
+tm_credits("Source: Statistics Netherlands (CBS)", position = c("left", "bottom"))
 ```
 
 ## Map variables
@@ -143,6 +143,8 @@ A data-driven map variable `x` comes with `x.scale`, `x.legend`, `x.chart` and `
 | `tm_scale_categorical()` / `tm_scale_ordinal()` | categories (unordered / ordered) |
 | `tm_scale_bivariate()` | two variables, one colour |
 | `tm_scale_asis()` | data already contains colours / sizes |
+
+: {tbl-colwidths="[45,55]"}
 
 ```{r, eval = FALSE}
 fill.scale = tm_scale_intervals(style = "fixed", breaks = c(0, 15, 20, 25, 50),
@@ -218,6 +220,8 @@ Open `exercises.R`.
 | Cyclic | cyclic | month, hour of day |
 | Two variables | bivariate | income × education |
 
+: {tbl-colwidths="[38,20,42]"}
+
 Rule of thumb: **the data determine the palette type**, the house style determines the hue.
 
 ## cols4all
@@ -262,18 +266,17 @@ fill.scale = tm_scale_continuous(values = "-pu_gn_div", midpoint = 0)
 ```{r}
 #| output-location: slide
 #| fig-height: 3.5
-pal_bad  = c4a("brewer.rd_yl_gn", n = 7)
-pal_good = c4a("pu_gn_div", n = 7)
-m = function(pal, title) {
+m = function(pal, title, cvd = "none") {
   tm_shape(NLD_muni) +
     tm_polygons("employment_rate", col = NULL,
       fill.scale = tm_scale_intervals(n = 7, values = pal),
       fill.legend = tm_legend_hide()) +
-    tm_title(title, size = 0.9)
+    tm_title(title, size = 0.9) +
+    tm_layout(color_vision_deficiency_sim = cvd)   # "deutan", "protan" or "tritan"
 }
 tmap_arrange(
-  m(pal_bad, "Red-yellow-green"), m(colorspace::deutan(pal_bad), "... with deuteranopia"),
-  m(pal_good, "Purple-green"),     m(colorspace::deutan(pal_good), "... with deuteranopia"),
+  m("brewer.rd_yl_gn", "Red-yellow-green"), m("brewer.rd_yl_gn", "... with deuteranopia", "deutan"),
+  m("pu_gn_div", "Purple-green"),           m("pu_gn_div", "... with deuteranopia", "deutan"),
   ncol = 4)
 ```
 
@@ -281,19 +284,21 @@ tmap_arrange(
 
 ```{r}
 #| output-location: slide
-NLD_muni$emp_dev = NLD_muni$employment_rate -
+NLD_muni$employment_rate_deviation = NLD_muni$employment_rate -
   weighted.mean(NLD_muni$employment_rate, NLD_muni$population, na.rm = TRUE)
 
 tm_shape(NLD_muni) +
   tm_polygons(
-    fill = "emp_dev",
+    fill = "employment_rate_deviation",
     fill.scale = tm_scale_intervals(
       breaks = c(-15, -6, -3, -1, 1, 3, 6, 15),
-      values = "cols4all.pu_gn_div",
-      midpoint = 0),
-    fill.legend = tm_legend("Employment rate,\ndeviation from NL (%-pt)"),
-    col = "white", lwd = 0.3) +
-tm_shape(NLD_prov) + tm_borders(col = "grey30")
+      values = "pu_gn_div",
+      label.style = "continuous"),
+    fill.legend = tm_legend(
+      title = "Employment rate vs. NL average (%-points)",
+      orientation = "landscape",
+      position = tm_pos_out("center", "bottom"),
+      width = 25))
 ```
 
 ## Your house style
@@ -306,7 +311,7 @@ c4a_gui(pal = house)          # test it in the dashboard
 c4a_plot(house, include.cvd = TRUE)
 ```
 
-```{r, echo = FALSE, fig.height = 2.5, out.height = "40%"}
+```{r, echo = FALSE, fig.height = 2, out.height = "30%"}
 house = c("#00a1cd", "#0058b8", "#afcb05", "#53a31d", "#f39200", "#e94c0a")
 c4a_plot(house, include.cvd = TRUE)
 ```
@@ -360,50 +365,38 @@ Large areas attract attention, regardless of their population.
 ```{r}
 #| output-location: slide
 library(tmap.cartogram)
-tm_shape(NLD_muni) +
+ZH_muni = NLD_muni[NLD_muni$province == "Zuid-Holland", ]
+ZH_muni$label = ifelse(ZH_muni$population >= 1e5,           # large ones only
+  sub(" ", "\n", ZH_muni$name), "")                            # 2 lines
+tm_shape(ZH_muni) +
   tm_cartogram_dorling(
     size = "population",
     fill = "income_high",
     fill.scale = tm_scale_intervals(values = "brewer.yl_gn_bu", style = "fisher"),
     fill.legend = tm_legend("High income\nhouseholds (%)"),
-    col = "white") +
-tm_title("Municipalities sized by population")
+    col = "black",
+    options = opt_tm_cartogram_dorling(share = 15)) +   # larger circles
+  tm_text("label", size = 0.7) +
+tm_title("Zuid-Holland: municipalities sized by population")
 ```
 
 Also `tm_cartogram()` (contiguous) and `tm_cartogram_ncont()` (non-contiguous). Use an equal-area CRS.
 
-## Suppressed and missing values
-
-`NLD_dist` has missing income figures. Who are they?
-
-```{r}
-d = st_drop_geometry(NLD_dist)
-summary(d$population[is.na(d$income_high)])
-```
-
-All districts with at most 525 inhabitants: values not published for **confidentiality**.
-
-A blank or grey area should tell the reader **why** it is empty.
-
-## Showing suppressed values
+## Cartograms: animated
 
 ```{r}
 #| output-location: slide
-#| fig-height: 5
-ams = NLD_dist[NLD_dist$province %in% c("Noord-Holland", "Flevoland"), ]
-tm_shape(ams) +
-  tm_polygons(
+tm_shape(ZH_muni) +
+  tm_cartogram_dorling(
+    size = "*population",              # *: animate from polygons to cartogram
     fill = "income_high",
-    fill.scale = tm_scale_intervals(
-      style = "fixed", breaks = c(0, 10, 15, 20, 25, 30, 60),
-      values = "brewer.purples",
-      value.na = "white", label.na = "Not published\n(< 550 inhabitants)"),
-    fill.legend = tm_legend("High income households (%)"),
-    col = "grey60", lwd = 0.3) +
-tm_layout(frame = FALSE)
+    fill.scale = tm_scale_intervals(values = "brewer.yl_gn_bu", style = "fisher"),
+    fill.legend = tm_legend("High income\nhouseholds (%)"),
+    col = "black",
+    options = opt_tm_cartogram_dorling(share = 15)) +
+  tm_text("label", size = 0.7) +
+tm_animate_fast(play = "pingpong")
 ```
-
-Combine with statistical disclosure control upstream (see the **rtauargus** tutorial, Room 3).
 
 ## Two variables at once: bivariate choropleth
 
@@ -416,13 +409,13 @@ tm_shape(NLD_muni) +
     fill.scale = tm_scale_bivariate(
       scale1 = tm_scale_intervals(style = "quantile", n = 3, labels = c("L", "M", "H")),
       scale2 = tm_scale_intervals(style = "quantile", n = 3, labels = c("L", "M", "H")),
-      values = "pu_gn_bivs"),
+      values = "stevens.pinkblue"),
     fill.legend = tm_legend_bivariate(
       xlab = "High income", ylab = "University degree",
       item.r = 0, item.width = 2, item.height = 2,
-      position = tm_pos_in("left", "top")),
+      position = tm_pos_out("right", "center")),
     col = "white", lwd = 0.5) +
-tm_shape(NLD_prov) + tm_borders(col = "grey20", lwd = 1.5) +
+tm_shape(NLD_prov) + tm_borders(col = "grey40", lwd = 1) +
 tm_layout(frame = FALSE)
 ```
 
@@ -465,8 +458,8 @@ map = tm_shape(NLD_muni) +
                             frame = FALSE),
     col = "white", lwd = 0.3) +
   tm_shape(NLD_prov) + tm_borders(col = "grey25") +
-  tm_scalebar(position = c("right", "bottom")) +
-  tm_credits("Source: CBS, 2022", position = c("right", "bottom")) +
+  tm_scalebar(position = c("left", "bottom")) +
+  tm_credits("Source: CBS, 2022", position = c("left", "bottom")) +
   tm_layout(frame = FALSE, fontfamily = "sans")
 map
 ```

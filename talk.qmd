@@ -34,10 +34,13 @@ knitr:
 ```{r, include = FALSE}
 library(tmap)
 tmap_mode("plot")
-tmap_options(frame = FALSE, legend.frame = FALSE, legend.bg = FALSE)
+tmap_options(frame = FALSE, legend.frame = FALSE, legend.bg = FALSE, legend.bg.alpha = 0)
 # map variables slide: legends at the same place in all maps
 legend_topleft = tm_layout(legend.position = tm_pos_in("left", "top"))
 NLD_muni$pop_dens = NLD_muni$population / as.numeric(NLD_muni$area)   # per km2
+# deviation from the Dutch average (weighted by population), in %-points
+NLD_muni$employment_rate_deviation = NLD_muni$employment_rate -
+  weighted.mean(NLD_muni$employment_rate, NLD_muni$population, na.rm = TRUE)
 ```
 
 <!-- Live maps: maps/toy_*.html (talk_prep/talk_toy_maps.R) and maps/world_globe.html, europe_10km.html,
@@ -107,14 +110,52 @@ tm_shape(NLD_muni) +
 :::
 ::::
 
+## Diverging palette
+
+:::: {.columns}
+::: {.column width="55%"}
+```{=html}
+<div class="sourceCode code-anno"><pre class="sourceCode r"><code class="sourceCode r">m = <span class="fu">tm_shape</span>(NLD_muni) +
+  <span class="fu">tm_polygons</span>(
+<span class="blk blk-var"><span class="blk-tag">what: variable</span>    fill = <span class="st">"employment_rate_deviation"</span>,</span><span class="blk blk-scale"><span class="blk-tag">how: data → colours</span>    fill.scale = <span class="fu">tm_scale_intervals</span>(
+      breaks = <span class="fu">c</span>(-15, -6, -3, -1, 1, 3, 6, 15),
+      values = <span class="st">"pu_gn_div"</span>,
+      label.style = <span class="st">"continuous"</span>),</span><span class="blk blk-legend"><span class="blk-tag">legend</span>    fill.legend = <span class="fu">tm_legend</span>(
+      title = <span class="st">"Employment rate vs. NL average"</span>,
+      orientation = <span class="st">"landscape"</span>,
+      position = <span class="fu">tm_pos_out</span>(<span class="st">"center"</span>, <span class="st">"bottom"</span>),
+      width = 20))</span>m</code></pre></div>
+```
+
+[Deviation from the Dutch average (%-points)]{.smaller-body}
+:::
+::: {.column width="45%"}
+```{r diverging, fig.width = 4.5, fig.height = 5.8}
+m = tm_shape(NLD_muni) +
+  tm_polygons(
+    fill = "employment_rate_deviation",
+    fill.scale = tm_scale_intervals(
+      breaks = c(-15, -6, -3, -1, 1, 3, 6, 15),
+      values = "pu_gn_div",
+      label.style = "continuous"),
+    fill.legend = tm_legend(
+      title = "Employment rate vs. NL average",
+      orientation = "landscape",
+      position = tm_pos_out("center", "bottom"),
+      width = 20))
+m
+```
+:::
+::::
+
 ## Modes: `"plot"` → `"view"` {.nostretch}
 
 ```{r, echo = TRUE, eval = FALSE}
 tmap_mode("view")
-tm_shape(NLD_muni) + tm_polygons(fill = "employment_rate")
+m
 ```
 
-<iframe data-src="maps/toy_view.html" width="100%" height="460px" style="border:none;"></iframe>
+<iframe data-src="maps/toy_view.html" width="100%" height="480px" style="border:none;"></iframe>
 
 [Same code]{.smaller-body} [Leaflet]{.smaller-body .gap} [`ttm()` / `rtm()` to switch]{.smaller-body .gap}
 
@@ -153,7 +194,7 @@ tm_shape(NLD_muni) + tm_polygons(fill = "employment_rate")
 ```{r, echo = TRUE, eval = FALSE}
 library(tmap.mapgl)
 tmap_mode("maplibre")
-tm_shape(NLD_muni) + tm_polygons(fill = "employment_rate")
+m
 ```
 
 <iframe data-src="maps/toy_maplibre.html" width="100%" height="460px" style="border:none;"></iframe>
@@ -162,11 +203,17 @@ tm_shape(NLD_muni) + tm_polygons(fill = "employment_rate")
 
 ```{r, echo = TRUE, eval = FALSE}
 tm_shape(NLD_muni) +
-  tm_polygons_3d(height = "pop_dens", fill = "employment_rate") +
+  tm_polygons_3d(
+    height = "pop_dens",
+    fill = "employment_rate_deviation",
+    fill.scale = tm_scale_intervals(
+      breaks = c(-15, -6, -3, -1, 1, 3, 6, 15),
+      values = "pu_gn_div",
+      label.style = "continuous")) +
   tm_maplibre(pitch = 50)
 ```
 
-<iframe data-src="maps/toy_3d.html" width="100%" height="430px" style="border:none;"></iframe>
+<iframe data-src="maps/toy_3d.html" width="100%" height="285px" style="border:none;"></iframe>
 
 [Height = density → **volume = count**]{.smaller-body} [colour free for a second variable]{.smaller-body .gap}
 
@@ -174,11 +221,17 @@ tm_shape(NLD_muni) +
 
 ## WorldPop
 
+:::: {.columns}
+::: {.column width="36%"}
 - Gridded population, **global**, 2025
-- **30″ × 30″** cells: "1 km", but only at the equator
-  - Paris: 0.93 × 0.61 km = 0.57 km²
-- So: aggregate **density** (1a) or reproject to an **equal-area** grid (1b)
+- **30″ × 30″** cells
+- So: aggregate **density** (1a) or **equal-area** grid (1b)
 - Open data: CC BY 4.0, [worldpop.org](https://www.worldpop.org)
+:::
+::: {.column width="64%"}
+![](figures/worldpop_grid.png){style="width:100%;"}
+:::
+::::
 
 
 ## 1a. The world {.nostretch}
@@ -193,20 +246,14 @@ tm_shape(NLD_muni) +
 
 [10 km equal-area grid (LAEA)]{.smaller-body} [hover over a city]{.smaller-body .gap}
 
-## Hover areas
+## Hovering trick
 
 :::: {.columns}
 ::: {.column width="68%"}
 ![](figures/europe_hitbox.png){style="width:100%;"}
 :::
 ::: {.column width="32%"}
-[Hover per column: thin, hidden behind each other]{.smaller-body}
-
-[Instead: one **hover area** per city]{.smaller-body}
-
-[Urban centre + ≤ 10 km]{.smaller-body}
-
-[Invisible, but hoverable ([made visible here]{style="color:#00A0CC;"})]{.smaller-body}
+[Invisible but hoverable polygons per city ([made visible here]{style="color:#00A0CC;"})]{.smaller-body}
 
 ```{r, echo = TRUE, eval = FALSE}
 tm_shape(urban) +
@@ -229,7 +276,7 @@ tm_polygons(
   fill = "white",
   pattern = "name")
 ```
-```{r pat-names, fig.width = 5, fig.height = 3.6}
+```{r pat-names, fig.width = 5, fig.height = 2.9}
 tm_shape(NLD_prov) +
   tm_polygons(fill = "white", pattern = "name", pattern.legend = tm_legend_hide())
 ```
@@ -238,14 +285,17 @@ tm_shape(NLD_prov) +
 ```{r, echo = TRUE, eval = FALSE}
 tm_polygons(
   fill = "employment_rate",
+  fill.scale = tm_scale(
+    values = "-kovesi.bu_wh_rd",
+    values.range = c(0.3, 0.8)),
   pattern = "dots",
   pattern_density = "pop_dens",
   pattern_density.scale =
     tm_scale_intervals(style = "quantile"))
 ```
-```{r pat-dots-dens, fig.width = 5, fig.height = 3.6}
+```{r pat-dots-dens, fig.width = 5, fig.height = 2.7}
 tm_shape(NLD_muni) +
-  tm_polygons(fill = "employment_rate", pattern = "dots", pattern_density = "pop_dens",
+  tm_polygons(fill = "employment_rate", fill.scale = tm_scale(values = "-kovesi.bu_wh_rd", values.range = c(0.3, 0.8)), pattern = "dots", pattern_density = "pop_dens",
     pattern_density.scale = tm_scale_intervals(style = "quantile"), lwd = 0.5) +
   tm_layout(legend.position = tm_pos_out("right", "center"))
 ```
@@ -261,16 +311,20 @@ tm_shape(NLD_muni) +
 ```{r, echo = TRUE, eval = FALSE}
 tm_polygons(
   fill = "employment_rate",
+  fill.scale = tm_scale(
+    values = "-kovesi.bu_wh_rd",
+    values.range = c(0.3, 0.8)),
   pattern = tm_patterns("mottle",
     grain = 0.15, contrast = 1.5),
-  pattern_density = "pop_dens",
+  pattern_density = "urbanity",
   pattern_density.scale =
-    tm_scale_intervals(style = "quantile"))
+    tm_scale_ordinal(values = c(1, 0)))
 ```
-```{r tex-mottle-dens, fig.width = 5, fig.height = 3.2}
+```{r tex-mottle-urb, fig.width = 5, fig.height = 2.9}
 tm_shape(NLD_muni) +
-  tm_polygons(fill = "employment_rate", pattern = tm_patterns("mottle", grain = 0.15, contrast = 1.5), pattern_density = "pop_dens",
-    pattern_density.scale = tm_scale_intervals(style = "quantile"), lwd = 0.5) +
+  tm_polygons(fill = "employment_rate", fill.scale = tm_scale(values = "-kovesi.bu_wh_rd", values.range = c(0.3, 0.8)), pattern = tm_patterns("mottle", grain = 0.15, contrast = 1.5), pattern_density = "urbanity",
+    pattern_density.scale = tm_scale_ordinal(values = c(1, 0)),
+    lwd = 0.5) +
   tm_layout(legend.position = tm_pos_out("right", "center"))
 ```
 :::
@@ -278,16 +332,16 @@ tm_shape(NLD_muni) +
 ```{r, echo = TRUE, eval = FALSE}
 tm_polygons(
   fill = "employment_rate",
+  fill.scale = tm_scale(
+    values = "-kovesi.bu_wh_rd",
+    values.range = c(0.3, 0.8)),
   pattern = "sketch",
-  pattern_density = "pop_dens",
-  pattern_density.scale =
-    tm_scale_intervals(style = "quantile",
-      values.range = c(1, 0)))
+  pattern_density = "urbanity")
 ```
-```{r tex-sketch-dens, fig.width = 5, fig.height = 3.2}
+```{r tex-sketch-urb, fig.width = 5, fig.height = 2.9}
 tm_shape(NLD_muni) +
-  tm_polygons(fill = "employment_rate", pattern = "sketch", pattern_density = "pop_dens",
-    pattern_density.scale = tm_scale_intervals(style = "quantile", values.range = c(1, 0)), lwd = 0.5) +
+  tm_polygons(fill = "employment_rate", fill.scale = tm_scale(values = "-kovesi.bu_wh_rd", values.range = c(0.3, 0.8)), pattern = "sketch", pattern_density = "urbanity",
+    lwd = 0.5) +
   tm_layout(legend.position = tm_pos_out("right", "center"))
 ```
 :::

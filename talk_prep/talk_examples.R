@@ -204,13 +204,12 @@ health_title = sprintf("Good health vs. NL (%.1f%%)", nl)   # difference in %-po
 
 ci_scale = tm_scale_intervals(breaks = c(0, 3, 5, 9, 40), values = c(0, 0.35, 0.7, 1),
 							  labels = c("< 3", "3 - 5", "5 - 9", "> 9"))
-ci_legend = tm_legend_cross("fill", xlab = health_title, ylab = "Width of 95% interval")
+ci_legend = tm_legend_cross("fill", xlab = health_title, ylab = "Width of\n95% interval")
 
-h3d = opt_tm_polygons_3d(height.max = "16%")
+# height.max in metres (a relative height, e.g. "16%", is relative to the square root of the bounding box area)
+h3d = opt_tm_polygons_3d(height.max = 45000)
 credits_health = tm_credits("Data: Gezondheidsmonitor Volwassenen en Ouderen 2024 (GGDs, CBS, RIVM);\ndistrict boundaries: CBS, Kadaster")
 
-# The textures are best seen when zoomed in: 2b and 2c start in the Randstad
-bb_randstad = st_bbox(c(xmin = 4.2, ymin = 51.8, xmax = 5.3, ymax = 52.45), crs = 4326)
 
 # ---------------------------------------------------------------------------
 # 2a. Height = population density (so volume = population), colour = health
@@ -229,7 +228,7 @@ save_map(m2a, "nld_health")
 # 2b. + texture "mottle": the wider the 95% interval, the more 'poorly painted' the roof
 #     (the average colour stays the same, so the estimate can still be read)
 # ---------------------------------------------------------------------------
-m2b = tm_shape(NLD, bbox = bb_randstad) +
+m2b = tm_shape(NLD) +
 	tm_polygons_3d(
 		height = "pop_dens",
 		fill = "health_diff", fill.scale = health_scale,
@@ -238,7 +237,7 @@ m2b = tm_shape(NLD, bbox = bb_randstad) +
 		pattern_density = "health_ci", pattern_density.scale = ci_scale, pattern_density.legend = ci_legend,
 		lwd = 0, hover = "label", popup = FALSE, options = h3d) +
 	credits_health +
-	tm_maplibre(pitch = 50, zoom = 9)
+	tm_maplibre(pitch = 50)
 m2b
 save_map(m2b, "nld_health_mottle")
 
@@ -247,7 +246,7 @@ save_map(m2b, "nld_health_mottle")
 #     pattern.zoom = "map": the texture is attached to the map, so it is enlarged when zooming in
 #     (by default, patterns keep their size on the screen)
 # ---------------------------------------------------------------------------
-m2c = tm_shape(NLD, bbox = bb_randstad) +
+m2c = tm_shape(NLD) +
 	tm_polygons_3d(
 		height = "pop_dens",
 		fill = "health_diff", fill.scale = health_scale,
@@ -255,6 +254,6 @@ m2c = tm_shape(NLD, bbox = bb_randstad) +
 		pattern_density = "health_ci", pattern_density.scale = ci_scale, pattern_density.legend = ci_legend,
 		lwd = 0, hover = "label", popup = FALSE, options = h3d) +
 	credits_health +
-	tm_maplibre(pitch = 50, zoom = 9, pattern.zoom = "map")
+	tm_maplibre(pitch = 50, pattern.zoom = "map")
 m2c
 save_map(m2c, "nld_health_sketch")

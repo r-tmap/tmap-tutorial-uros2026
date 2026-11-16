@@ -292,13 +292,40 @@ Martijn Tennekes
 </table>
 </div></div>
 </section>
+<section id="diverging-palette" class="slide level2">
+<h2>Diverging palette</h2>
+<div class="columns">
+<div class="column" style="width:55%;">
+<div class="sourceCode code-anno"><pre class="sourceCode r code-with-copy"><code class="sourceCode r">m = <span class="fu">tm_shape</span>(NLD_muni) +
+  <span class="fu">tm_polygons</span>(
+<span class="blk blk-var"><span class="blk-tag">what: variable</span>    fill = <span class="st">"employment_rate_deviation"</span>,</span><span class="blk blk-scale"><span class="blk-tag">how: data → colours</span>    fill.scale = <span class="fu">tm_scale_intervals</span>(
+      breaks = <span class="fu">c</span>(-15, -6, -3, -1, 1, 3, 6, 15),
+      values = <span class="st">"pu_gn_div"</span>,
+      label.style = <span class="st">"continuous"</span>),</span><span class="blk blk-legend"><span class="blk-tag">legend</span>    fill.legend = <span class="fu">tm_legend</span>(
+      title = <span class="st">"Employment rate vs. NL average"</span>,
+      orientation = <span class="st">"landscape"</span>,
+      position = <span class="fu">tm_pos_out</span>(<span class="st">"center"</span>, <span class="st">"bottom"</span>),
+      width = 20))</span>m</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><span class="smaller-body">Deviation from the Dutch average (%-points)</span></p>
+</div><div class="column" style="width:45%;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="talk_files/figure-revealjs/diverging-1.png" class="quarto-figure quarto-figure-center" width="675"></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
+</section>
 <section id="modes-plot-view" class="slide level2 nostretch">
 <h2>Modes: <code>"plot"</code> → <code>"view"</code></h2>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_mode</span>(<span class="st">"view"</span>)</span>
-<span id="cb4-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(NLD_muni) <span class="sc">+</span> <span class="fu">tm_polygons</span>(<span class="at">fill =</span> <span class="st">"employment_rate"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-2"><a href="" aria-hidden="true" tabindex="-1"></a>m</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<iframe data-src="maps/toy_view.html" width="100%" height="460px" style="border:none;">
+<iframe data-src="maps/toy_view.html" width="100%" height="480px" style="border:none;">
 </iframe>
 <p><span class="smaller-body">Same code</span> <span class="smaller-body gap">Leaflet</span> <span class="smaller-body gap"><code>ttm()</code> / <code>rtm()</code> to switch</span></p>
 </section>
@@ -383,7 +410,7 @@ Martijn Tennekes
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tmap.mapgl)</span>
 <span id="cb5-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_mode</span>(<span class="st">"maplibre"</span>)</span>
-<span id="cb5-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(NLD_muni) <span class="sc">+</span> <span class="fu">tm_polygons</span>(<span class="at">fill =</span> <span class="st">"employment_rate"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-3"><a href="" aria-hidden="true" tabindex="-1"></a>m</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <iframe data-src="maps/toy_maplibre.html" width="100%" height="460px" style="border:none;">
 </iframe>
@@ -392,10 +419,16 @@ Martijn Tennekes
 <h2>3D: one extra map variable, <code>height</code></h2>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(NLD_muni) <span class="sc">+</span></span>
-<span id="cb6-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons_3d</span>(<span class="at">height =</span> <span class="st">"pop_dens"</span>, <span class="at">fill =</span> <span class="st">"employment_rate"</span>) <span class="sc">+</span></span>
-<span id="cb6-3"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_maplibre</span>(<span class="at">pitch =</span> <span class="dv">50</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons_3d</span>(</span>
+<span id="cb6-3"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">height =</span> <span class="st">"pop_dens"</span>,</span>
+<span id="cb6-4"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"employment_rate_deviation"</span>,</span>
+<span id="cb6-5"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill.scale =</span> <span class="fu">tm_scale_intervals</span>(</span>
+<span id="cb6-6"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="at">breaks =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">15</span>, <span class="sc">-</span><span class="dv">6</span>, <span class="sc">-</span><span class="dv">3</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">6</span>, <span class="dv">15</span>),</span>
+<span id="cb6-7"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="at">values =</span> <span class="st">"pu_gn_div"</span>,</span>
+<span id="cb6-8"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="at">label.style =</span> <span class="st">"continuous"</span>)) <span class="sc">+</span></span>
+<span id="cb6-9"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_maplibre</span>(<span class="at">pitch =</span> <span class="dv">50</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<iframe data-src="maps/toy_3d.html" width="100%" height="430px" style="border:none;">
+<iframe data-src="maps/toy_3d.html" width="100%" height="285px" style="border:none;">
 </iframe>
 <p><span class="smaller-body">Height = density → <strong>volume = count</strong></span> <span class="smaller-body gap">colour free for a second variable</span></p>
 </section></section>
@@ -406,15 +439,17 @@ Martijn Tennekes
 </section>
 <section id="worldpop" class="slide level2">
 <h2>WorldPop</h2>
+<div class="columns">
+<div class="column" style="width:36%;">
 <ul>
 <li>Gridded population, <strong>global</strong>, 2025</li>
-<li><strong>30″ × 30″</strong> cells: “1 km”, but only at the equator
-<ul>
-<li>Paris: 0.93 × 0.61 km = 0.57 km²</li>
-</ul></li>
-<li>So: aggregate <strong>density</strong> (1a) or reproject to an <strong>equal-area</strong> grid (1b)</li>
+<li><strong>30″ × 30″</strong> cells</li>
+<li>So: aggregate <strong>density</strong> (1a) or <strong>equal-area</strong> grid (1b)</li>
 <li>Open data: CC BY 4.0, <a href="https://www.worldpop.org">worldpop.org</a></li>
 </ul>
+</div><div class="column" style="width:64%;">
+<p><img data-src="figures/worldpop_grid.png" style="width:100%;"></p>
+</div></div>
 </section>
 <section id="a.-the-world" class="slide level2 nostretch">
 <h2>1a. The world</h2>
@@ -428,16 +463,13 @@ Martijn Tennekes
 </iframe>
 <p><span class="smaller-body">10 km equal-area grid (LAEA)</span> <span class="smaller-body gap">hover over a city</span></p>
 </section>
-<section id="hover-areas" class="slide level2">
-<h2>Hover areas</h2>
+<section id="hovering-trick" class="slide level2">
+<h2>Hovering trick</h2>
 <div class="columns">
 <div class="column" style="width:68%;">
 <p><img data-src="figures/europe_hitbox.png" style="width:100%;"></p>
 </div><div class="column" style="width:32%;">
-<p><span class="smaller-body">Hover per column: thin, hidden behind each other</span></p>
-<p><span class="smaller-body">Instead: one <strong>hover area</strong> per city</span></p>
-<p><span class="smaller-body">Urban centre + ≤ 10 km</span></p>
-<p><span class="smaller-body">Invisible, but hoverable (<span style="color:#00A0CC;">made visible here</span>)</span></p>
+<p><span class="smaller-body">Invisible but hoverable polygons per city (<span style="color:#00A0CC;">made visible here</span>)</span></p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(urban) <span class="sc">+</span></span>
 <span id="cb7-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(</span>
@@ -474,10 +506,13 @@ Martijn Tennekes
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_polygons</span>(</span>
 <span id="cb9-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">fill =</span> <span class="st">"employment_rate"</span>,</span>
-<span id="cb9-3"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">pattern =</span> <span class="st">"dots"</span>,</span>
-<span id="cb9-4"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">pattern_density =</span> <span class="st">"pop_dens"</span>,</span>
-<span id="cb9-5"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">pattern_density.scale =</span></span>
-<span id="cb9-6"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_scale_intervals</span>(<span class="at">style =</span> <span class="st">"quantile"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-3"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">fill.scale =</span> <span class="fu">tm_scale</span>(</span>
+<span id="cb9-4"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">values =</span> <span class="st">"-kovesi.bu_wh_rd"</span>,</span>
+<span id="cb9-5"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">values.range =</span> <span class="fu">c</span>(<span class="fl">0.3</span>, <span class="fl">0.8</span>)),</span>
+<span id="cb9-6"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">pattern =</span> <span class="st">"dots"</span>,</span>
+<span id="cb9-7"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">pattern_density =</span> <span class="st">"pop_dens"</span>,</span>
+<span id="cb9-8"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">pattern_density.scale =</span></span>
+<span id="cb9-9"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_scale_intervals</span>(<span class="at">style =</span> <span class="st">"quantile"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
@@ -498,17 +533,20 @@ Martijn Tennekes
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_polygons</span>(</span>
 <span id="cb10-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">fill =</span> <span class="st">"employment_rate"</span>,</span>
-<span id="cb10-3"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">pattern =</span> <span class="fu">tm_patterns</span>(<span class="st">"mottle"</span>,</span>
-<span id="cb10-4"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">grain =</span> <span class="fl">0.15</span>, <span class="at">contrast =</span> <span class="fl">1.5</span>),</span>
-<span id="cb10-5"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">pattern_density =</span> <span class="st">"pop_dens"</span>,</span>
-<span id="cb10-6"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">pattern_density.scale =</span></span>
-<span id="cb10-7"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_scale_intervals</span>(<span class="at">style =</span> <span class="st">"quantile"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-3"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">fill.scale =</span> <span class="fu">tm_scale</span>(</span>
+<span id="cb10-4"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">values =</span> <span class="st">"-kovesi.bu_wh_rd"</span>,</span>
+<span id="cb10-5"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">values.range =</span> <span class="fu">c</span>(<span class="fl">0.3</span>, <span class="fl">0.8</span>)),</span>
+<span id="cb10-6"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">pattern =</span> <span class="fu">tm_patterns</span>(<span class="st">"mottle"</span>,</span>
+<span id="cb10-7"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">grain =</span> <span class="fl">0.15</span>, <span class="at">contrast =</span> <span class="fl">1.5</span>),</span>
+<span id="cb10-8"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">pattern_density =</span> <span class="st">"urbanity"</span>,</span>
+<span id="cb10-9"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">pattern_density.scale =</span></span>
+<span id="cb10-10"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_scale_ordinal</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="talk_files/figure-revealjs/tex-mottle-dens-1.png" class="quarto-figure quarto-figure-center" width="750"></p>
+<p><img data-src="talk_files/figure-revealjs/tex-mottle-urb-1.png" class="quarto-figure quarto-figure-center" width="750"></p>
 </figure>
 </div>
 </div>
@@ -517,17 +555,17 @@ Martijn Tennekes
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_polygons</span>(</span>
 <span id="cb11-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">fill =</span> <span class="st">"employment_rate"</span>,</span>
-<span id="cb11-3"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">pattern =</span> <span class="st">"sketch"</span>,</span>
-<span id="cb11-4"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">pattern_density =</span> <span class="st">"pop_dens"</span>,</span>
-<span id="cb11-5"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">pattern_density.scale =</span></span>
-<span id="cb11-6"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_scale_intervals</span>(<span class="at">style =</span> <span class="st">"quantile"</span>,</span>
-<span id="cb11-7"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="at">values.range =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-3"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">fill.scale =</span> <span class="fu">tm_scale</span>(</span>
+<span id="cb11-4"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">values =</span> <span class="st">"-kovesi.bu_wh_rd"</span>,</span>
+<span id="cb11-5"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">values.range =</span> <span class="fu">c</span>(<span class="fl">0.3</span>, <span class="fl">0.8</span>)),</span>
+<span id="cb11-6"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">pattern =</span> <span class="st">"sketch"</span>,</span>
+<span id="cb11-7"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">pattern_density =</span> <span class="st">"urbanity"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="talk_files/figure-revealjs/tex-sketch-dens-1.png" class="quarto-figure quarto-figure-center" width="750"></p>
+<p><img data-src="talk_files/figure-revealjs/tex-sketch-urb-1.png" class="quarto-figure quarto-figure-center" width="750"></p>
 </figure>
 </div>
 </div>

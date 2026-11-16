@@ -20,7 +20,7 @@ All data used ship with **tmap** (`NLD_prov`, `NLD_muni`, `NLD_dist`, `World`): 
 
 1. **tmap in a nutshell**: grammar, map variables, scales, classification, facets (exercise 1)
 2. **Colours with cols4all**: palette types, colour-blind friendliness, diverging palettes, house-style palettes (exercise 2)
-3. **Mapping official statistics**: rates vs. counts, bubbles, cartograms, suppressed values, bivariate choropleths, donut maps, publication layout and styles (exercise 3)
+3. **Mapping official statistics**: rates vs. counts, bubbles, cartograms, bivariate choropleths, donut maps, publication layout and styles (exercise 3)
 4. **Interactive and 3D maps**: view mode, popups, tmap.mapgl, `tm_polygons_3d()` (exercise 4)
 
 ## Rendering

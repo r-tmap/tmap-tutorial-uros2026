@@ -224,21 +224,25 @@ Martijn Tennekes
 <tbody>
 <tr class="odd">
 <td>11:00</td>
-<td>1. tmap in a nutshell + exercise 1</td>
+<td>1. tmap in a nutshell</td>
 </tr>
 <tr class="even">
-<td>11:20</td>
-<td>2. Colours with cols4all + exercise 2</td>
+<td>11:15</td>
+<td>Exercise 1 (30 min)</td>
 </tr>
 <tr class="odd">
 <td>11:45</td>
-<td>3. Mapping official statistics + exercise 3</td>
+<td>2. Colours with cols4all</td>
 </tr>
 <tr class="even">
-<td>12:10</td>
-<td>4. Interactive and 3D maps + exercise 4</td>
+<td>11:55</td>
+<td>3. Mapping official statistics + exercise 2</td>
 </tr>
 <tr class="odd">
+<td>12:10</td>
+<td>4. Interactive and 3D maps + exercise 3</td>
+</tr>
+<tr class="even">
 <td>12:25</td>
 <td>Wrap-up and questions</td>
 </tr>
@@ -247,7 +251,7 @@ Martijn Tennekes
 <p>Materials: <a href="https://github.com/mtennekes/tmap-tutorial-uros2026">github.com/mtennekes/tmap-tutorial-uros2026</a></p>
 <ul>
 <li><code>tutorial.qmd</code>: these slides</li>
-<li><code>exercises.R</code>: exercises (solutions in <code>solutions.R</code>)</li>
+<li><code>exercises.R</code>: exercises</li>
 </ul>
 </section>
 <section id="setup" class="slide level2">
@@ -345,7 +349,7 @@ Martijn Tennekes
 <span id="cb5-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(</span>
 <span id="cb5-3"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"edu_appl_sci"</span>,                   <span class="co"># map variable: fill</span></span>
 <span id="cb5-4"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill.scale =</span> <span class="fu">tm_scale_intervals</span>(),       <span class="co"># how data -&gt; colours</span></span>
-<span id="cb5-5"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill.legend =</span> <span class="fu">tm_legend</span>(<span class="st">"University degree (%)"</span>)) <span class="sc">+</span>  <span class="co"># legend</span></span>
+<span id="cb5-5"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill.legend =</span> <span class="fu">tm_legend</span>(<span class="st">"Higher education (%)"</span>)) <span class="sc">+</span>  <span class="co"># legend</span></span>
 <span id="cb5-6"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(NLD_prov) <span class="sc">+</span>                         <span class="co"># a second shape</span></span>
 <span id="cb5-7"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">lwd =</span> <span class="dv">2</span>) <span class="sc">+</span>                      <span class="co"># its layer</span></span>
 <span id="cb5-8"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_title</span>(<span class="st">"Higher education per municipality, 2022"</span>) <span class="sc">+</span></span>
@@ -499,14 +503,14 @@ Martijn Tennekes
 </figure>
 </div>
 </div>
-</div></section><section id="exercise-1-5-min" class="slide level2">
-<h2>Exercise 1 (5 min)</h2>
+</div></section><section id="exercise-1-30-min" class="slide level2">
+<h2>Exercise 1 (30 min)</h2>
 <p>Open <code>exercises.R</code>.</p>
 <ol type="1">
 <li>Make a choropleth of <code>employment_rate</code> per municipality (<code>NLD_muni</code>).</li>
 <li>Use <code>tm_scale_intervals()</code> with <code>style = "fixed"</code> and breaks at 60, 65, 70, 75.</li>
 <li>Add the province borders, a title and a credits line with the source.</li>
-<li><em>Bonus</em>: make facets per <code>urbanity</code>.</li>
+<li><em>Bonus</em>: make facets per <code>province</code>.</li>
 </ol>
 </section></section>
 <section>
@@ -694,15 +698,6 @@ Martijn Tennekes
 <li><strong>Missing values</strong>: a colour that cannot be confused with the palette (<code>value.na</code>)</li>
 <li><strong>WCAG</strong>: at least 3:1 contrast for informative non-text elements</li>
 </ul>
-</section>
-<section id="exercise-2-7-min" class="slide level2">
-<h2>Exercise 2 (7 min)</h2>
-<ol type="1">
-<li>Run <code>c4a_gui()</code>. Find a <strong>sequential</strong>, colour-blind friendly palette you like.</li>
-<li>Use it for the map of exercise 1.</li>
-<li>Map <code>dwelling_ownership</code> minus its national average with a <strong>diverging</strong> palette and <code>midpoint = 0</code>.</li>
-<li><em>Bonus</em>: analyse the house-style palette of your own institute with <code>c4a_gui(pal = ...)</code>.</li>
-</ol>
 </section></section>
 <section>
 <section id="mapping-official-statistics" class="title-slide slide level1 center">
@@ -747,22 +742,31 @@ Martijn Tennekes
 <h2>Cartograms</h2>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tmap.cartogram)</span>
-<span id="cb21-2"><a href="" aria-hidden="true" tabindex="-1"></a>ZH_muni <span class="ot">=</span> NLD_muni[NLD_muni<span class="sc">$</span>province <span class="sc">==</span> <span class="st">"Zuid-Holland"</span>, ]</span>
-<span id="cb21-3"><a href="" aria-hidden="true" tabindex="-1"></a>ZH_muni<span class="sc">$</span>label <span class="ot">=</span> <span class="fu">ifelse</span>(ZH_muni<span class="sc">$</span>population <span class="sc">&gt;=</span> <span class="fl">1e5</span>,           <span class="co"># large ones only</span></span>
-<span id="cb21-4"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sub</span>(<span class="st">" "</span>, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>, ZH_muni<span class="sc">$</span>name), <span class="st">""</span>)                            <span class="co"># 2 lines</span></span>
-<span id="cb21-5"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(ZH_muni) <span class="sc">+</span></span>
-<span id="cb21-6"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_cartogram_dorling</span>(</span>
-<span id="cb21-7"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="st">"population"</span>,</span>
-<span id="cb21-8"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"income_high"</span>,</span>
-<span id="cb21-9"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill.scale =</span> <span class="fu">tm_scale_intervals</span>(<span class="at">values =</span> <span class="st">"brewer.yl_gn_bu"</span>, <span class="at">style =</span> <span class="st">"fisher"</span>),</span>
-<span id="cb21-10"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill.legend =</span> <span class="fu">tm_legend</span>(<span class="st">"High income</span><span class="sc">\n</span><span class="st">households (%)"</span>),</span>
-<span id="cb21-11"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">col =</span> <span class="st">"black"</span>,</span>
-<span id="cb21-12"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">options =</span> <span class="fu">opt_tm_cartogram_dorling</span>(<span class="at">share =</span> <span class="dv">15</span>)) <span class="sc">+</span>   <span class="co"># larger circles</span></span>
-<span id="cb21-13"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_text</span>(<span class="st">"label"</span>, <span class="at">size =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
-<span id="cb21-14"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_title</span>(<span class="st">"Zuid-Holland: municipalities sized by population"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb21-2"><a href="" aria-hidden="true" tabindex="-1"></a>Africa <span class="ot">=</span> World[World<span class="sc">$</span>continent <span class="sc">==</span> <span class="st">"Africa"</span>, ]</span>
+<span id="cb21-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(Africa, <span class="at">crs =</span> <span class="st">"+proj=aea +lat_1=20 +lat_2=-23 +lon_0=25"</span>) <span class="sc">+</span>  <span class="co"># equal-area</span></span>
+<span id="cb21-4"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_cartogram</span>(</span>
+<span id="cb21-5"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="st">"pop_est"</span>,</span>
+<span id="cb21-6"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"gdp_cap_est"</span>,</span>
+<span id="cb21-7"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill.scale =</span> <span class="fu">tm_scale_intervals</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1000</span>, <span class="dv">2000</span>, <span class="dv">5000</span>, <span class="dv">10000</span>),</span>
+<span id="cb21-8"><a href="" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">values =</span> <span class="st">"brewer.yl_gn_bu"</span>),</span>
+<span id="cb21-9"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill.legend =</span> <span class="fu">tm_legend</span>(<span class="st">"GDP per capita</span><span class="sc">\n</span><span class="st">(US dollars)"</span>),</span>
+<span id="cb21-10"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">col =</span> <span class="st">"white"</span>) <span class="sc">+</span></span>
+<span id="cb21-11"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_labels</span>(<span class="st">"name"</span>,</span>
+<span id="cb21-12"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="st">"pop_est"</span>,                                  <span class="co"># label size by population</span></span>
+<span id="cb21-13"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">size.scale =</span> <span class="fu">tm_scale_continuous</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">1.2</span>)),</span>
+<span id="cb21-14"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">size.legend =</span> <span class="fu">tm_legend_hide</span>(),</span>
+<span id="cb21-15"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">col =</span> <span class="st">"auto"</span>,                                      <span class="co"># black or white, by fill</span></span>
+<span id="cb21-16"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">options =</span> <span class="fu">opt_tm_labels</span>(</span>
+<span id="cb21-17"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="at">placement =</span> <span class="fu">tm_placement</span>(                        <span class="co"># labels that don't fit:</span></span>
+<span id="cb21-18"><a href="" aria-hidden="true" tabindex="-1"></a>        <span class="at">fallback =</span> <span class="fu">c</span>(<span class="st">"wrap"</span>, <span class="st">"rotate"</span>, <span class="st">"shrink"</span>, <span class="st">"move"</span>, <span class="st">"drop"</span>),</span>
+<span id="cb21-19"><a href="" aria-hidden="true" tabindex="-1"></a>        <span class="at">move.max =</span> <span class="fl">0.5</span>),                               <span class="co"># move at most 50% outside</span></span>
+<span id="cb21-20"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="at">leader =</span> <span class="fu">tm_leader</span>(<span class="at">col =</span> <span class="st">"gray20"</span>, <span class="at">lwd =</span> <span class="fl">0.5</span>, <span class="at">type =</span> <span class="st">"elbow"</span>))) <span class="sc">+</span></span>
+<span id="cb21-21"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_title</span>(<span class="st">"Africa: countries sized by population"</span>) <span class="sc">+</span></span>
+<span id="cb21-22"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_layout</span>(<span class="at">inner.margins =</span> <span class="fu">c</span>(<span class="fl">0.02</span>, <span class="fl">0.1</span>, <span class="fl">0.02</span>, <span class="fl">0.1</span>))     <span class="co"># room for moved labels</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
-<p>Also <code>tm_cartogram()</code> (contiguous) and <code>tm_cartogram_ncont()</code> (non-contiguous). Use an equal-area CRS.</p>
+<p>Also <code>tm_cartogram_ncont()</code> (non-contiguous) and <code>tm_cartogram_dorling()</code> (circles). Use an equal-area CRS.</p>
+<p>More on labels: <a href="https://r-tmap.github.io/tmap/articles/adv_labels">vignette</a>.</p>
 </section>
 <section id="cartograms-output" class="slide level2 output-location-slide"><h2>Cartograms</h2><div class="cell output-location-slide" data-layout-align="center">
 <div class="cell-output-display">
@@ -772,83 +776,22 @@ Martijn Tennekes
 </figure>
 </div>
 </div>
-</div></section><section id="cartograms-animated" class="slide level2">
-<h2>Cartograms: animated</h2>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(ZH_muni) <span class="sc">+</span></span>
-<span id="cb22-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_cartogram_dorling</span>(</span>
-<span id="cb22-3"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="st">"*population"</span>,              <span class="co"># *: animate from polygons to cartogram</span></span>
-<span id="cb22-4"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"income_high"</span>,</span>
-<span id="cb22-5"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill.scale =</span> <span class="fu">tm_scale_intervals</span>(<span class="at">values =</span> <span class="st">"brewer.yl_gn_bu"</span>, <span class="at">style =</span> <span class="st">"fisher"</span>),</span>
-<span id="cb22-6"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill.legend =</span> <span class="fu">tm_legend</span>(<span class="st">"High income</span><span class="sc">\n</span><span class="st">households (%)"</span>),</span>
-<span id="cb22-7"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">col =</span> <span class="st">"black"</span>,</span>
-<span id="cb22-8"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">options =</span> <span class="fu">opt_tm_cartogram_dorling</span>(<span class="at">share =</span> <span class="dv">15</span>)) <span class="sc">+</span></span>
-<span id="cb22-9"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_text</span>(<span class="st">"label"</span>, <span class="at">size =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
-<span id="cb22-10"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_animate_fast</span>(<span class="at">play =</span> <span class="st">"pingpong"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-
-</section>
-<section id="cartograms-animated-output" class="slide level2 output-location-slide"><h2>Cartograms: animated</h2><div class="cell output-location-slide" data-layout-align="center">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="tutorial_files/figure-revealjs/unnamed-chunk-18-1.gif" class="quarto-figure quarto-figure-center" style="width:100.0%;height:70.0%"></p>
-</figure>
-</div>
-</div>
-</div></section><section id="two-variables-at-once-bivariate-choropleth" class="slide level2">
-<h2>Two variables at once: bivariate choropleth</h2>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(NLD_muni) <span class="sc">+</span></span>
-<span id="cb23-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(</span>
-<span id="cb23-3"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="fu">tm_vars</span>(<span class="fu">c</span>(<span class="st">"income_high"</span>, <span class="st">"edu_appl_sci"</span>), <span class="at">multivariate =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb23-4"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill.scale =</span> <span class="fu">tm_scale_bivariate</span>(</span>
-<span id="cb23-5"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="at">scale1 =</span> <span class="fu">tm_scale_intervals</span>(<span class="at">style =</span> <span class="st">"quantile"</span>, <span class="at">n =</span> <span class="dv">3</span>, <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"L"</span>, <span class="st">"M"</span>, <span class="st">"H"</span>)),</span>
-<span id="cb23-6"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="at">scale2 =</span> <span class="fu">tm_scale_intervals</span>(<span class="at">style =</span> <span class="st">"quantile"</span>, <span class="at">n =</span> <span class="dv">3</span>, <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"L"</span>, <span class="st">"M"</span>, <span class="st">"H"</span>)),</span>
-<span id="cb23-7"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="at">values =</span> <span class="st">"stevens.pinkblue"</span>),</span>
-<span id="cb23-8"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill.legend =</span> <span class="fu">tm_legend_bivariate</span>(</span>
-<span id="cb23-9"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="at">xlab =</span> <span class="st">"High income"</span>, <span class="at">ylab =</span> <span class="st">"University degree"</span>,</span>
-<span id="cb23-10"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="at">item.r =</span> <span class="dv">0</span>, <span class="at">item.width =</span> <span class="dv">2</span>, <span class="at">item.height =</span> <span class="dv">2</span>,</span>
-<span id="cb23-11"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="at">position =</span> <span class="fu">tm_pos_out</span>(<span class="st">"right"</span>, <span class="st">"center"</span>)),</span>
-<span id="cb23-12"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">col =</span> <span class="st">"white"</span>, <span class="at">lwd =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb23-13"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(NLD_prov) <span class="sc">+</span> <span class="fu">tm_borders</span>(<span class="at">col =</span> <span class="st">"grey40"</span>, <span class="at">lwd =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb23-14"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_layout</span>(<span class="at">frame =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-
-</section>
-<section id="two-variables-at-once-bivariate-choropleth-output" class="slide level2 output-location-slide"><h2>Two variables at once: bivariate choropleth</h2><div class="cell output-location-slide" data-layout-align="center">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="tutorial_files/figure-revealjs/unnamed-chunk-19-1.png" class="quarto-figure quarto-figure-center" style="width:100.0%;height:70.0%"></p>
-</figure>
-</div>
-</div>
-</div></section><section id="reading-a-bivariate-map" class="slide level2">
-<h2>Reading a bivariate map</h2>
-<ul>
-<li>3 × 3 classes; the legend is essential</li>
-<li>Diagonal (low-low, high-high) shows <strong>correlation</strong>; off-diagonal corners show <strong>exceptions</strong></li>
-<li>Bivariate palettes in cols4all: <code>c4a_palettes(type = "bivs")</code>, and <code>"bivc"</code>, <code>"bivd"</code>, <code>"bivg"</code></li>
-<li>Explain the legend to a general audience, or use facets instead</li>
-</ul>
-</section>
-<section id="composition-donut-maps" class="slide level2">
+</div></section><section id="composition-donut-maps" class="slide level2">
 <h2>Composition: donut maps</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tmap.glyphs)</span>
-<span id="cb24-2"><a href="" aria-hidden="true" tabindex="-1"></a>ZH_muni <span class="ot">=</span> NLD_muni[NLD_muni<span class="sc">$</span>province <span class="sc">==</span> <span class="st">"Zuid-Holland"</span>, ]</span>
-<span id="cb24-3"><a href="" aria-hidden="true" tabindex="-1"></a>ZH_muni<span class="sc">$</span>income_middle <span class="ot">=</span> <span class="dv">100</span> <span class="sc">-</span> ZH_muni<span class="sc">$</span>income_high <span class="sc">-</span> ZH_muni<span class="sc">$</span>income_low</span>
-<span id="cb24-4"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(ZH_muni) <span class="sc">+</span></span>
-<span id="cb24-5"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="at">fill =</span> <span class="st">"grey95"</span>, <span class="at">col =</span> <span class="st">"grey70"</span>) <span class="sc">+</span></span>
-<span id="cb24-6"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_donuts</span>(</span>
-<span id="cb24-7"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">parts =</span> <span class="fu">tm_vars</span>(<span class="fu">c</span>(<span class="st">"income_low"</span>, <span class="st">"income_middle"</span>, <span class="st">"income_high"</span>), <span class="at">multivariate =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb24-8"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill.scale =</span> <span class="fu">tm_scale_categorical</span>(<span class="at">values =</span> <span class="st">"-pu_gn_div"</span>,</span>
-<span id="cb24-9"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Low"</span>, <span class="st">"Middle"</span>, <span class="st">"High"</span>)),</span>
-<span id="cb24-10"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill.legend =</span> <span class="fu">tm_legend</span>(<span class="st">"Income group"</span>),</span>
-<span id="cb24-11"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="st">"population"</span>,</span>
-<span id="cb24-12"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">size.scale =</span> <span class="fu">tm_scale_continuous</span>(<span class="at">ticks =</span> <span class="fu">c</span>(<span class="dv">50000</span>, <span class="dv">100000</span>, <span class="dv">250000</span>, <span class="dv">500000</span>)),</span>
-<span id="cb24-13"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">size.legend =</span> <span class="fu">tm_legend</span>(<span class="st">"Population"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tmap.glyphs)</span>
+<span id="cb22-2"><a href="" aria-hidden="true" tabindex="-1"></a>ZH_muni <span class="ot">=</span> NLD_muni[NLD_muni<span class="sc">$</span>province <span class="sc">==</span> <span class="st">"Zuid-Holland"</span>, ]</span>
+<span id="cb22-3"><a href="" aria-hidden="true" tabindex="-1"></a>ZH_muni<span class="sc">$</span>income_middle <span class="ot">=</span> <span class="dv">100</span> <span class="sc">-</span> ZH_muni<span class="sc">$</span>income_high <span class="sc">-</span> ZH_muni<span class="sc">$</span>income_low</span>
+<span id="cb22-4"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(ZH_muni) <span class="sc">+</span></span>
+<span id="cb22-5"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="at">fill =</span> <span class="st">"grey95"</span>, <span class="at">col =</span> <span class="st">"grey70"</span>) <span class="sc">+</span></span>
+<span id="cb22-6"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_donuts</span>(</span>
+<span id="cb22-7"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">parts =</span> <span class="fu">tm_vars</span>(<span class="fu">c</span>(<span class="st">"income_low"</span>, <span class="st">"income_middle"</span>, <span class="st">"income_high"</span>), <span class="at">multivariate =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb22-8"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill.scale =</span> <span class="fu">tm_scale_categorical</span>(<span class="at">values =</span> <span class="st">"-pu_gn_div"</span>,</span>
+<span id="cb22-9"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Low"</span>, <span class="st">"Middle"</span>, <span class="st">"High"</span>)),</span>
+<span id="cb22-10"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill.legend =</span> <span class="fu">tm_legend</span>(<span class="st">"Income group"</span>),</span>
+<span id="cb22-11"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="st">"population"</span>,</span>
+<span id="cb22-12"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">size.scale =</span> <span class="fu">tm_scale_continuous</span>(<span class="at">ticks =</span> <span class="fu">c</span>(<span class="dv">50000</span>, <span class="dv">100000</span>, <span class="dv">250000</span>, <span class="dv">500000</span>)),</span>
+<span id="cb22-13"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">size.legend =</span> <span class="fu">tm_legend</span>(<span class="st">"Population"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 </section>
@@ -856,62 +799,60 @@ Martijn Tennekes
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="tutorial_files/figure-revealjs/unnamed-chunk-20-1.png" class="quarto-figure quarto-figure-center" style="width:100.0%;height:70.0%"></p>
+<p><img data-src="tutorial_files/figure-revealjs/unnamed-chunk-18-1.png" class="quarto-figure quarto-figure-center" style="width:100.0%;height:70.0%"></p>
 </figure>
 </div>
 </div>
 </div></section><section id="publication-layout-and-export" class="slide level2">
 <h2>Publication layout and export</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="" aria-hidden="true" tabindex="-1"></a>map <span class="ot">=</span> <span class="fu">tm_shape</span>(NLD_muni) <span class="sc">+</span></span>
-<span id="cb25-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="st">"edu_appl_sci"</span>,</span>
-<span id="cb25-3"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill.scale =</span> <span class="fu">tm_scale_intervals</span>(<span class="at">style =</span> <span class="st">"fixed"</span>, <span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">25</span>, <span class="dv">30</span>, <span class="dv">40</span>, <span class="dv">60</span>),</span>
-<span id="cb25-4"><a href="" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">values =</span> <span class="st">"tol.iridescent"</span>),</span>
-<span id="cb25-5"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill.legend =</span> <span class="fu">tm_legend</span>(<span class="st">"University</span><span class="sc">\n</span><span class="st">degree (%)"</span>, <span class="at">position =</span> <span class="fu">tm_pos_in</span>(<span class="st">"left"</span>, <span class="st">"top"</span>),</span>
-<span id="cb25-6"><a href="" aria-hidden="true" tabindex="-1"></a>                            <span class="at">frame =</span> <span class="cn">FALSE</span>),</span>
-<span id="cb25-7"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">col =</span> <span class="st">"white"</span>, <span class="at">lwd =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
-<span id="cb25-8"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(NLD_prov) <span class="sc">+</span> <span class="fu">tm_borders</span>(<span class="at">col =</span> <span class="st">"grey25"</span>) <span class="sc">+</span></span>
-<span id="cb25-9"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_scalebar</span>(<span class="at">position =</span> <span class="fu">c</span>(<span class="st">"left"</span>, <span class="st">"bottom"</span>)) <span class="sc">+</span></span>
-<span id="cb25-10"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_credits</span>(<span class="st">"Source: CBS, 2022"</span>, <span class="at">position =</span> <span class="fu">c</span>(<span class="st">"left"</span>, <span class="st">"bottom"</span>)) <span class="sc">+</span></span>
-<span id="cb25-11"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">frame =</span> <span class="cn">FALSE</span>, <span class="at">fontfamily =</span> <span class="st">"sans"</span>)</span>
-<span id="cb25-12"><a href="" aria-hidden="true" tabindex="-1"></a>map</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="" aria-hidden="true" tabindex="-1"></a>map <span class="ot">=</span> <span class="fu">tm_shape</span>(NLD_muni) <span class="sc">+</span></span>
+<span id="cb23-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="st">"edu_appl_sci"</span>,</span>
+<span id="cb23-3"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill.scale =</span> <span class="fu">tm_scale_intervals</span>(<span class="at">style =</span> <span class="st">"fixed"</span>, <span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">25</span>, <span class="dv">30</span>, <span class="dv">40</span>, <span class="dv">60</span>),</span>
+<span id="cb23-4"><a href="" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">values =</span> <span class="st">"tol.iridescent"</span>),</span>
+<span id="cb23-5"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill.legend =</span> <span class="fu">tm_legend</span>(<span class="st">"Higher</span><span class="sc">\n</span><span class="st">education (%)"</span>, <span class="at">position =</span> <span class="fu">tm_pos_in</span>(<span class="st">"left"</span>, <span class="st">"top"</span>),</span>
+<span id="cb23-6"><a href="" aria-hidden="true" tabindex="-1"></a>                            <span class="at">frame =</span> <span class="cn">FALSE</span>),</span>
+<span id="cb23-7"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">col =</span> <span class="st">"white"</span>, <span class="at">lwd =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb23-8"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(NLD_prov) <span class="sc">+</span> <span class="fu">tm_borders</span>(<span class="at">col =</span> <span class="st">"grey25"</span>) <span class="sc">+</span></span>
+<span id="cb23-9"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_scalebar</span>(<span class="at">position =</span> <span class="fu">c</span>(<span class="st">"left"</span>, <span class="st">"bottom"</span>)) <span class="sc">+</span></span>
+<span id="cb23-10"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_credits</span>(<span class="st">"Source: CBS, 2022"</span>, <span class="at">position =</span> <span class="fu">c</span>(<span class="st">"left"</span>, <span class="st">"bottom"</span>)) <span class="sc">+</span></span>
+<span id="cb23-11"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">frame =</span> <span class="cn">FALSE</span>, <span class="at">fontfamily =</span> <span class="st">"sans"</span>)</span>
+<span id="cb23-12"><a href="" aria-hidden="true" tabindex="-1"></a>map</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_save</span>(map, <span class="st">"edu.png"</span>, <span class="at">width =</span> <span class="dv">1600</span>, <span class="at">height =</span> <span class="dv">1900</span>, <span class="at">dpi =</span> <span class="dv">300</span>)</span>
-<span id="cb26-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_save</span>(map, <span class="st">"edu.pdf"</span>)    <span class="co"># vector output for print</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_save</span>(map, <span class="st">"edu.png"</span>, <span class="at">width =</span> <span class="dv">1600</span>, <span class="at">height =</span> <span class="dv">1900</span>, <span class="at">dpi =</span> <span class="dv">300</span>)</span>
+<span id="cb24-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_save</span>(map, <span class="st">"edu.pdf"</span>)    <span class="co"># vector output for print</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="publication-layout-and-export-output" class="slide level2 output-location-slide"><h2>Publication layout and export</h2><div class="cell output-location-slide" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="tutorial_files/figure-revealjs/unnamed-chunk-21-1.png" class="quarto-figure quarto-figure-center" style="width:100.0%;height:70.0%"></p>
+<p><img data-src="tutorial_files/figure-revealjs/unnamed-chunk-19-1.png" class="quarto-figure quarto-figure-center" style="width:100.0%;height:70.0%"></p>
 </figure>
 </div>
 </div>
 </div></section><section id="styles-one-look-for-all-your-maps" class="slide level2">
 <h2>Styles: one look for all your maps</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_options</span>(</span>
-<span id="cb27-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">frame =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb27-3"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">value.na =</span> <span class="st">"white"</span>,</span>
-<span id="cb27-4"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">label.na =</span> <span class="st">"Not published"</span>,</span>
-<span id="cb27-5"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">legend.frame =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb27-6"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">text.fontfamily =</span> <span class="st">"sans"</span>)</span>
-<span id="cb27-7"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_options_save</span>(<span class="st">"my_institute"</span>)      <span class="co"># save as a named style</span></span>
-<span id="cb27-8"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-9"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_style</span>(<span class="st">"my_institute"</span>)            <span class="co"># use it later</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_options</span>(</span>
+<span id="cb25-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">frame =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb25-3"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">value.na =</span> <span class="st">"white"</span>,</span>
+<span id="cb25-4"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">label.na =</span> <span class="st">"Not published"</span>,</span>
+<span id="cb25-5"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">legend.frame =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb25-6"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">text.fontfamily =</span> <span class="st">"sans"</span>)</span>
+<span id="cb25-7"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_options_save</span>(<span class="st">"my_institute"</span>)      <span class="co"># save as a named style</span></span>
+<span id="cb25-8"><a href="" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-9"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_style</span>(<span class="st">"my_institute"</span>)            <span class="co"># use it later</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Put this in an internal package: every map from your office has the same look.</p>
 </section>
-<section id="exercise-3-10-min" class="slide level2">
-<h2>Exercise 3 (10 min)</h2>
+<section id="exercise-2-10-min" class="slide level2">
+<h2>Exercise 2 (10 min)</h2>
 <ol type="1">
 <li>Map the <strong>number of dwellings</strong> (<code>dwelling_total</code>) per municipality as bubbles on top of a light grey choropleth.</li>
-<li>Now make a Dorling cartogram sized by <code>dwelling_total</code> and coloured by <code>dwelling_ownership</code>.</li>
-<li>Make a district map (<code>NLD_dist</code>) of one province of your choice for <code>income_low</code>, with a clear label for suppressed values.</li>
-<li><em>Bonus</em>: bivariate map of <code>income_low</code> and <code>pop_65plus</code>. Which palette from <code>c4a_palettes(type = "bivs")</code> works best?</li>
+<li><em>Bonus</em>: colour the bubbles by <code>dwelling_ownership</code> with the reversed <code>"magma"</code> palette, give them black borders, and make them twice as large (<code>size.scale = tm_scale(values.scale = 2)</code>).</li>
 </ol>
 </section></section>
 <section>
@@ -922,16 +863,16 @@ Martijn Tennekes
 <section id="one-line-to-go-interactive" class="slide level2">
 <h2>One line to go interactive</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_mode</span>(<span class="st">"view"</span>)        <span class="co"># or: ttm() to toggle</span></span>
-<span id="cb28-2"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(NLD_muni) <span class="sc">+</span></span>
-<span id="cb28-4"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="st">"edu_appl_sci"</span>,</span>
-<span id="cb28-5"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill.scale =</span> <span class="fu">tm_scale_intervals</span>(<span class="at">values =</span> <span class="st">"tol.iridescent"</span>),</span>
-<span id="cb28-6"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">hover =</span> <span class="st">"name"</span>,</span>
-<span id="cb28-7"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">popup =</span> <span class="fu">tm_popup</span>(<span class="at">vars =</span> <span class="fu">c</span>(<span class="st">"Population"</span> <span class="ot">=</span> <span class="st">"population"</span>,</span>
-<span id="cb28-8"><a href="" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"University degree (%)"</span> <span class="ot">=</span> <span class="st">"edu_appl_sci"</span>,</span>
-<span id="cb28-9"><a href="" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"High income (%)"</span> <span class="ot">=</span> <span class="st">"income_high"</span>))) <span class="sc">+</span></span>
-<span id="cb28-10"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_basemap</span>(<span class="st">"CartoDB.Positron"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_mode</span>(<span class="st">"view"</span>)        <span class="co"># or: ttm() to toggle</span></span>
+<span id="cb26-2"><a href="" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(NLD_muni) <span class="sc">+</span></span>
+<span id="cb26-4"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="st">"edu_appl_sci"</span>,</span>
+<span id="cb26-5"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill.scale =</span> <span class="fu">tm_scale_intervals</span>(<span class="at">values =</span> <span class="st">"tol.iridescent"</span>),</span>
+<span id="cb26-6"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">hover =</span> <span class="st">"name"</span>,</span>
+<span id="cb26-7"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">popup =</span> <span class="fu">tm_popup</span>(<span class="at">vars =</span> <span class="fu">c</span>(<span class="st">"Population"</span> <span class="ot">=</span> <span class="st">"population"</span>,</span>
+<span id="cb26-8"><a href="" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"Higher education (%)"</span> <span class="ot">=</span> <span class="st">"edu_appl_sci"</span>,</span>
+<span id="cb26-9"><a href="" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"High income (%)"</span> <span class="ot">=</span> <span class="st">"income_high"</span>))) <span class="sc">+</span></span>
+<span id="cb26-10"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_basemap</span>(<span class="st">"CartoDB.Positron"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The same map code, rendered with Leaflet.</p>
 <ul>
@@ -942,7 +883,7 @@ Martijn Tennekes
 <section id="sharing-interactive-maps" class="slide level2">
 <h2>Sharing interactive maps</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_save</span>(map, <span class="st">"edu.html"</span>)                      <span class="co"># standalone HTML file</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_save</span>(map, <span class="st">"edu.html"</span>)                      <span class="co"># standalone HTML file</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li>Embed in <strong>Quarto</strong> / R Markdown reports and websites</li>
@@ -952,9 +893,9 @@ Martijn Tennekes
 <section id="tmap.mapgl-maplibre-and-mapbox" class="slide level2">
 <h2>tmap.mapgl: MapLibre and Mapbox</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tmap.mapgl)</span>
-<span id="cb30-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_mode</span>(<span class="st">"maplibre"</span>)   <span class="co"># free; "mapbox" needs an API key</span></span>
-<span id="cb30-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">rtm</span>()                   <span class="co"># rotate: plot -&gt; view -&gt; mapbox -&gt; maplibre</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tmap.mapgl)</span>
+<span id="cb28-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_mode</span>(<span class="st">"maplibre"</span>)   <span class="co"># free; "mapbox" needs an API key</span></span>
+<span id="cb28-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">rtm</span>()                   <span class="co"># rotate: plot -&gt; view -&gt; mapbox -&gt; maplibre</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li><strong>WebGL</strong> rendering: fast with many features (all 3340 districts, grids, …)</li>
@@ -965,28 +906,25 @@ Martijn Tennekes
 <section id="d-height-density-volume-count" class="slide level2">
 <h2>3D: height = density, volume = count</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_mode</span>(<span class="st">"maplibre"</span>)</span>
-<span id="cb31-2"><a href="" aria-hidden="true" tabindex="-1"></a>NLD_dist<span class="sc">$</span>pop_dens <span class="ot">=</span> NLD_dist<span class="sc">$</span>population <span class="sc">/</span> NLD_dist<span class="sc">$</span>area</span>
-<span id="cb31-3"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-4"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(NLD_dist) <span class="sc">+</span></span>
-<span id="cb31-5"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons_3d</span>(</span>
-<span id="cb31-6"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">height =</span> <span class="st">"pop_dens"</span>,</span>
-<span id="cb31-7"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"edu_appl_sci"</span>,</span>
-<span id="cb31-8"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill.scale =</span> <span class="fu">tm_scale_intervals</span>(<span class="at">style =</span> <span class="st">"kmeans"</span>, <span class="at">values =</span> <span class="st">"tol.iridescent"</span>),</span>
-<span id="cb31-9"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill.legend =</span> <span class="fu">tm_legend</span>(<span class="st">"University degree (%)"</span>),</span>
-<span id="cb31-10"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">hover =</span> <span class="st">"name"</span>) <span class="sc">+</span></span>
-<span id="cb31-11"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_maplibre</span>(<span class="at">pitch =</span> <span class="dv">45</span>) <span class="sc">+</span></span>
-<span id="cb31-12"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_crs</span>(<span class="dv">3857</span>)      <span class="co"># Web Mercator: avoids 3D artefacts of the default globe</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_mode</span>(<span class="st">"maplibre"</span>)</span>
+<span id="cb29-2"><a href="" aria-hidden="true" tabindex="-1"></a>NLD_dist<span class="sc">$</span>pop_dens <span class="ot">=</span> NLD_dist<span class="sc">$</span>population <span class="sc">/</span> NLD_dist<span class="sc">$</span>area</span>
+<span id="cb29-3"><a href="" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-4"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(NLD_dist) <span class="sc">+</span></span>
+<span id="cb29-5"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons_3d</span>(</span>
+<span id="cb29-6"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">height =</span> <span class="st">"pop_dens"</span>,</span>
+<span id="cb29-7"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"edu_appl_sci"</span>,</span>
+<span id="cb29-8"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill.scale =</span> <span class="fu">tm_scale_intervals</span>(<span class="at">style =</span> <span class="st">"kmeans"</span>, <span class="at">values =</span> <span class="st">"tol.iridescent"</span>),</span>
+<span id="cb29-9"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill.legend =</span> <span class="fu">tm_legend</span>(<span class="st">"Higher education (%)"</span>),</span>
+<span id="cb29-10"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="at">hover =</span> <span class="st">"name"</span>) <span class="sc">+</span></span>
+<span id="cb29-11"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_maplibre</span>(<span class="at">pitch =</span> <span class="dv">45</span>) <span class="sc">+</span></span>
+<span id="cb29-12"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_crs</span>(<span class="dv">3857</span>)      <span class="co"># Web Mercator: avoids 3D artefacts of the default globe</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>More on Friday: <strong>A5</strong>, <em>3D Thematic Mapping in R with tmap v4 and tmap.mapgl</em>.</p>
 </section>
-<section id="exercise-4-5-min" class="slide level2">
-<h2>Exercise 4 (5 min)</h2>
-<ol type="1">
-<li>Switch to <code>"view"</code> mode and show the map of exercise 3.3 interactively, with the district name on hover and income in the popup.</li>
-<li>Load <strong>tmap.mapgl</strong>, switch to <code>"maplibre"</code> and make the 3D map of the previous slide.</li>
-<li>Change the <code>pitch</code> and the <code>fill</code> variable. Rotate the map with Ctrl + drag.</li>
-</ol>
+<section id="exercise-3-10-min" class="slide level2">
+<h2>Exercise 3 (10 min)</h2>
+<p>Load <strong>tmap.mapgl</strong>, switch to <code>"maplibre"</code> and make the 3D map of the previous slide: districts with height = population density and fill = <code>edu_appl_sci</code>, with legend title “Higher education (%)”.</p>
+<p>Tip: rotate the map with Ctrl + drag.</p>
 </section></section>
 <section>
 <section id="wrap-up" class="title-slide slide level1 center">
@@ -1008,7 +946,7 @@ Martijn Tennekes
 <ul>
 <li>tmap vignettes: <a href="https://r-tmap.github.io/tmap/articles/">r-tmap.github.io/tmap</a>
 <ul>
-<li><a href="https://r-tmap.github.io/tmap/articles/basics_scales">scales</a> · <a href="https://r-tmap.github.io/tmap/articles/examples_biv_choro">bivariate choropleth</a> · <a href="https://r-tmap.github.io/tmap/articles/ext_cartogram">cartograms</a> · <a href="https://r-tmap.github.io/tmap/articles/ext_glyphs">glyphs</a> · <a href="https://r-tmap.github.io/tmap/articles/ext_mapgl">tmap.mapgl</a></li>
+<li><a href="https://r-tmap.github.io/tmap/articles/basics_scales">scales</a> · <a href="https://r-tmap.github.io/tmap/articles/ext_cartogram">cartograms</a> · <a href="https://r-tmap.github.io/tmap/articles/ext_glyphs">glyphs</a> · <a href="https://r-tmap.github.io/tmap/articles/ext_mapgl">tmap.mapgl</a></li>
 </ul></li>
 <li>cols4all: <a href="https://cols4all.github.io/cols4all-R/">cols4all.github.io/cols4all-R</a></li>
 <li>Book: <em>Spatial Data Visualization with tmap</em> — <a href="https://tmap.geocompx.org/">tmap.geocompx.org</a></li>

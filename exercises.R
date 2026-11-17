@@ -1,5 +1,5 @@
 # uRos2026 tutorial: Mapping Official Statistics with the tmapverse and cols4all
-# Exercises (solutions in solutions.R)
+# Exercises
 
 library(tmap)
 library(cols4all)
@@ -9,7 +9,7 @@ library(cols4all)
 names(NLD_muni)
 
 
-# Exercise 1: tmap in a nutshell ------------------------------------------
+# Exercise 1: tmap in a nutshell (30 min) ---------------------------------
 
 # 1. Make a choropleth of employment_rate per municipality (NLD_muni).
 
@@ -22,60 +22,29 @@ names(NLD_muni)
 #    line with the source (tm_credits()).
 
 
-# 4. Bonus: make facets per urbanity (tm_facets_wrap()).
+# 4. Bonus: make facets per province (tm_facets_wrap()).
 
 
 
-# Exercise 2: colours with cols4all ---------------------------------------
-
-# 1. Run c4a_gui(). Find a sequential, colour-blind friendly palette you like.
-c4a_gui()
-
-# 2. Use it for the map of exercise 1 (argument values in the scale function).
-
-
-# 3. Map the deviation of dwelling_ownership from its national average with
-#    a diverging palette and midpoint = 0.
-#    Tip: compute the national average weighted by dwelling_total.
-
-
-# 4. Bonus: analyse the house-style palette of your own institute:
-#    c4a_gui(pal = c("#......", "#......", ...))
-
-
-
-# Exercise 3: mapping official statistics ---------------------------------
+# Exercise 2: bubble map (10 min) -----------------------------------------
 
 # 1. Map the number of dwellings (dwelling_total) per municipality as bubbles
-#    on top of a light grey choropleth.
+#    (tm_bubbles()) on top of a light grey choropleth.
 
 
-# 2. Make a Dorling cartogram sized by dwelling_total and coloured by
-#    dwelling_ownership.
-library(tmap.cartogram)
-
-
-# 3. Make a district map (NLD_dist) of one province of your choice for
-#    income_low, with a clear legend label for suppressed values.
-unique(NLD_dist$province)
-
-
-# 4. Bonus: bivariate map of income_low and pop_65plus.
-#    Which palette from c4a_palettes(type = "bivs") works best?
-c4a_palettes(type = "bivs")
+# 2. Bonus: colour the bubbles by dwelling_ownership, using the reversed
+#    "magma" palette, and give them black borders. Make the bubbles twice as
+#    large.
+#    Tip: size.scale = tm_scale(values.scale = 2).
 
 
 
-# Exercise 4: interactive and 3D maps -------------------------------------
+# Exercise 3: 3D map (10 min) ---------------------------------------------
 
-# 1. Switch to "view" mode and show the map of exercise 3.3 interactively,
-#    with the district name on hover and income in the popup.
-
-
-# 2. Load tmap.mapgl, switch to "maplibre" mode and make the 3D map of
-#    population density (height) and education (fill) per district.
+# Load tmap.mapgl, switch to "maplibre" mode and make a 3D map of the
+# districts (NLD_dist) with tm_polygons_3d(): height = population density,
+# fill = edu_appl_sci, legend title "Higher education (%)".
+# Tip: population density = population / area.
 library(tmap.mapgl)
 
-
-# 3. Change the pitch and the fill variable. Rotate the map with Ctrl + drag.
 

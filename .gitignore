@@ -41,3 +41,6 @@ figures/*
 
 # local files that are not on GitHub
 local/
+
+# solutions: published after the exercises are discussed
+solutions.R

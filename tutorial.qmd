@@ -41,16 +41,17 @@ library(sf)
 
 | Time | Part |
 |------|------|
-| 11:00 | 1. tmap in a nutshell + exercise 1 |
-| 11:20 | 2. Colours with cols4all + exercise 2 |
-| 11:45 | 3. Mapping official statistics + exercise 3 |
-| 12:10 | 4. Interactive and 3D maps + exercise 4 |
+| 11:00 | 1. tmap in a nutshell |
+| 11:15 | Exercise 1 (30 min) |
+| 11:45 | 2. Colours with cols4all |
+| 11:55 | 3. Mapping official statistics + exercise 2 |
+| 12:10 | 4. Interactive and 3D maps + exercise 3 |
 | 12:25 | Wrap-up and questions |
 
 Materials: [github.com/mtennekes/tmap-tutorial-uros2026](https://github.com/mtennekes/tmap-tutorial-uros2026)
 
 - `tutorial.qmd`: these slides
-- `exercises.R`: exercises (solutions in `solutions.R`)
+- `exercises.R`: exercises
 
 ## Setup
 
@@ -111,7 +112,7 @@ tm_shape(NLD_muni) +                         # shape: the spatial data
   tm_polygons(
     fill = "edu_appl_sci",                   # map variable: fill
     fill.scale = tm_scale_intervals(),       # how data -> colours
-    fill.legend = tm_legend("University degree (%)")) +  # legend
+    fill.legend = tm_legend("Higher education (%)")) +  # legend
 tm_shape(NLD_prov) +                         # a second shape
   tm_borders(lwd = 2) +                      # its layer
 tm_title("Higher education per municipality, 2022") +
@@ -192,14 +193,14 @@ tm_layout(panel.labels = c("0-14", "25-44", "65+"))
 
 Also: `tm_facets_wrap("province")`, `tm_facets_grid()`, and animations with `tm_facets_pagewise()` + `tmap_animation()`.
 
-## Exercise 1 (5 min)
+## Exercise 1 (30 min)
 
 Open `exercises.R`.
 
 1. Make a choropleth of `employment_rate` per municipality (`NLD_muni`).
 2. Use `tm_scale_intervals()` with `style = "fixed"` and breaks at 60, 65, 70, 75.
 3. Add the province borders, a title and a credits line with the source.
-4. *Bonus*: make facets per `urbanity`.
+4. *Bonus*: make facets per `province`.
 
 # 2. Colours with cols4all
 
@@ -325,13 +326,6 @@ Often fine for categorical charts, but **not** for sequential maps: build a sequ
 - **Missing values**: a colour that cannot be confused with the palette (`value.na`)
 - **WCAG**: at least 3:1 contrast for informative non-text elements
 
-## Exercise 2 (7 min)
-
-1. Run `c4a_gui()`. Find a **sequential**, colour-blind friendly palette you like.
-2. Use it for the map of exercise 1.
-3. Map `dwelling_ownership` minus its national average with a **diverging** palette and `midpoint = 0`.
-4. *Bonus*: analyse the house-style palette of your own institute with `c4a_gui(pal = ...)`.
-
 # 3. Mapping official statistics
 
 ## Choropleths are for rates, not counts
@@ -365,66 +359,32 @@ Large areas attract attention, regardless of their population.
 ```{r}
 #| output-location: slide
 library(tmap.cartogram)
-ZH_muni = NLD_muni[NLD_muni$province == "Zuid-Holland", ]
-ZH_muni$label = ifelse(ZH_muni$population >= 1e5,           # large ones only
-  sub(" ", "\n", ZH_muni$name), "")                            # 2 lines
-tm_shape(ZH_muni) +
-  tm_cartogram_dorling(
-    size = "population",
-    fill = "income_high",
-    fill.scale = tm_scale_intervals(values = "brewer.yl_gn_bu", style = "fisher"),
-    fill.legend = tm_legend("High income\nhouseholds (%)"),
-    col = "black",
-    options = opt_tm_cartogram_dorling(share = 15)) +   # larger circles
-  tm_text("label", size = 0.7) +
-tm_title("Zuid-Holland: municipalities sized by population")
+Africa = World[World$continent == "Africa", ]
+tm_shape(Africa, crs = "+proj=aea +lat_1=20 +lat_2=-23 +lon_0=25") +  # equal-area
+  tm_cartogram(
+    size = "pop_est",
+    fill = "gdp_cap_est",
+    fill.scale = tm_scale_intervals(breaks = c(0, 1000, 2000, 5000, 10000),
+                                    values = "brewer.yl_gn_bu"),
+    fill.legend = tm_legend("GDP per capita\n(US dollars)"),
+    col = "white") +
+  tm_labels("name",
+    size = "pop_est",                                  # label size by population
+    size.scale = tm_scale_continuous(values = c(0.5, 1.2)),
+    size.legend = tm_legend_hide(),
+    col = "auto",                                      # black or white, by fill
+    options = opt_tm_labels(
+      placement = tm_placement(                        # labels that don't fit:
+        fallback = c("wrap", "rotate", "shrink", "move", "drop"),
+        move.max = 0.5),                               # move at most 50% outside
+      leader = tm_leader(col = "gray20", lwd = 0.5, type = "elbow"))) +
+tm_title("Africa: countries sized by population") +
+tm_layout(inner.margins = c(0.02, 0.1, 0.02, 0.1))     # room for moved labels
 ```
 
-Also `tm_cartogram()` (contiguous) and `tm_cartogram_ncont()` (non-contiguous). Use an equal-area CRS.
+Also `tm_cartogram_ncont()` (non-contiguous) and `tm_cartogram_dorling()` (circles). Use an equal-area CRS.
 
-## Cartograms: animated
-
-```{r}
-#| output-location: slide
-tm_shape(ZH_muni) +
-  tm_cartogram_dorling(
-    size = "*population",              # *: animate from polygons to cartogram
-    fill = "income_high",
-    fill.scale = tm_scale_intervals(values = "brewer.yl_gn_bu", style = "fisher"),
-    fill.legend = tm_legend("High income\nhouseholds (%)"),
-    col = "black",
-    options = opt_tm_cartogram_dorling(share = 15)) +
-  tm_text("label", size = 0.7) +
-tm_animate_fast(play = "pingpong")
-```
-
-## Two variables at once: bivariate choropleth
-
-```{r}
-#| output-location: slide
-#| fig-height: 6
-tm_shape(NLD_muni) +
-  tm_polygons(
-    fill = tm_vars(c("income_high", "edu_appl_sci"), multivariate = TRUE),
-    fill.scale = tm_scale_bivariate(
-      scale1 = tm_scale_intervals(style = "quantile", n = 3, labels = c("L", "M", "H")),
-      scale2 = tm_scale_intervals(style = "quantile", n = 3, labels = c("L", "M", "H")),
-      values = "stevens.pinkblue"),
-    fill.legend = tm_legend_bivariate(
-      xlab = "High income", ylab = "University degree",
-      item.r = 0, item.width = 2, item.height = 2,
-      position = tm_pos_out("right", "center")),
-    col = "white", lwd = 0.5) +
-tm_shape(NLD_prov) + tm_borders(col = "grey40", lwd = 1) +
-tm_layout(frame = FALSE)
-```
-
-## Reading a bivariate map
-
-- 3 × 3 classes; the legend is essential
-- Diagonal (low-low, high-high) shows **correlation**; off-diagonal corners show **exceptions**
-- Bivariate palettes in cols4all: `c4a_palettes(type = "bivs")`, and `"bivc"`, `"bivd"`, `"bivg"`
-- Explain the legend to a general audience, or use facets instead
+More on labels: [vignette](https://r-tmap.github.io/tmap/articles/adv_labels).
 
 ## Composition: donut maps
 
@@ -454,7 +414,7 @@ map = tm_shape(NLD_muni) +
   tm_polygons("edu_appl_sci",
     fill.scale = tm_scale_intervals(style = "fixed", breaks = c(10, 20, 25, 30, 40, 60),
                                     values = "tol.iridescent"),
-    fill.legend = tm_legend("University\ndegree (%)", position = tm_pos_in("left", "top"),
+    fill.legend = tm_legend("Higher\neducation (%)", position = tm_pos_in("left", "top"),
                             frame = FALSE),
     col = "white", lwd = 0.3) +
   tm_shape(NLD_prov) + tm_borders(col = "grey25") +
@@ -485,12 +445,10 @@ tmap_style("my_institute")            # use it later
 
 Put this in an internal package: every map from your office has the same look.
 
-## Exercise 3 (10 min)
+## Exercise 2 (10 min)
 
 1. Map the **number of dwellings** (`dwelling_total`) per municipality as bubbles on top of a light grey choropleth.
-2. Now make a Dorling cartogram sized by `dwelling_total` and coloured by `dwelling_ownership`.
-3. Make a district map (`NLD_dist`) of one province of your choice for `income_low`, with a clear label for suppressed values.
-4. *Bonus*: bivariate map of `income_low` and `pop_65plus`. Which palette from `c4a_palettes(type = "bivs")` works best?
+2. *Bonus*: colour the bubbles by `dwelling_ownership` with the reversed `"magma"` palette, give them black borders, and make them twice as large (`size.scale = tm_scale(values.scale = 2)`).
 
 # 4. Interactive and 3D maps
 
@@ -504,7 +462,7 @@ tm_shape(NLD_muni) +
     fill.scale = tm_scale_intervals(values = "tol.iridescent"),
     hover = "name",
     popup = tm_popup(vars = c("Population" = "population",
-                                "University degree (%)" = "edu_appl_sci",
+                                "Higher education (%)" = "edu_appl_sci",
                                 "High income (%)" = "income_high"))) +
 tm_basemap("CartoDB.Positron")
 ```
@@ -546,7 +504,7 @@ tm_shape(NLD_dist) +
     height = "pop_dens",
     fill = "edu_appl_sci",
     fill.scale = tm_scale_intervals(style = "kmeans", values = "tol.iridescent"),
-    fill.legend = tm_legend("University degree (%)"),
+    fill.legend = tm_legend("Higher education (%)"),
     hover = "name") +
 tm_maplibre(pitch = 45) +
 tm_crs(3857)      # Web Mercator: avoids 3D artefacts of the default globe
@@ -554,11 +512,11 @@ tm_crs(3857)      # Web Mercator: avoids 3D artefacts of the default globe
 
 More on Friday: **A5**, *3D Thematic Mapping in R with tmap v4 and tmap.mapgl*.
 
-## Exercise 4 (5 min)
+## Exercise 3 (10 min)
 
-1. Switch to `"view"` mode and show the map of exercise 3.3 interactively, with the district name on hover and income in the popup.
-2. Load **tmap.mapgl**, switch to `"maplibre"` and make the 3D map of the previous slide.
-3. Change the `pitch` and the `fill` variable. Rotate the map with Ctrl + drag.
+Load **tmap.mapgl**, switch to `"maplibre"` and make the 3D map of the previous slide: districts with height = population density and fill = `edu_appl_sci`, with legend title "Higher education (%)".
+
+Tip: rotate the map with Ctrl + drag.
 
 # Wrap-up
 
@@ -573,7 +531,7 @@ More on Friday: **A5**, *3D Thematic Mapping in R with tmap v4 and tmap.mapgl*.
 ## Learn more
 
 - tmap vignettes: [r-tmap.github.io/tmap](https://r-tmap.github.io/tmap/articles/)
-  - [scales](https://r-tmap.github.io/tmap/articles/basics_scales) · [bivariate choropleth](https://r-tmap.github.io/tmap/articles/examples_biv_choro) · [cartograms](https://r-tmap.github.io/tmap/articles/ext_cartogram) · [glyphs](https://r-tmap.github.io/tmap/articles/ext_glyphs) · [tmap.mapgl](https://r-tmap.github.io/tmap/articles/ext_mapgl)
+  - [scales](https://r-tmap.github.io/tmap/articles/basics_scales) · [cartograms](https://r-tmap.github.io/tmap/articles/ext_cartogram) · [glyphs](https://r-tmap.github.io/tmap/articles/ext_glyphs) · [tmap.mapgl](https://r-tmap.github.io/tmap/articles/ext_mapgl)
 - cols4all: [cols4all.github.io/cols4all-R](https://cols4all.github.io/cols4all-R/)
 - Book: *Spatial Data Visualization with tmap* — [tmap.geocompx.org](https://tmap.geocompx.org/)
 - Tennekes & Nowosad (2026), *tmap: Thematic Maps in R*, Journal of Statistical Software

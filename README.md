@@ -4,7 +4,7 @@ Materials for [uRos2026](https://urosconf.org), Paris, 18–20 November 2026.
 
 | | Session | When | Files |
 |---|---|---|---|
-| Tutorial | *Mapping Official Statistics with the tmapverse and cols4all* | Wed 18 Nov, 11:00–12:30, Room 2 | `tutorial.qmd`, `exercises.R`, `solutions.R` |
+| Tutorial | *Mapping Official Statistics with the tmapverse and cols4all* | Wed 18 Nov, 11:00–12:30, Room 2 | `tutorial.qmd`, `exercises.R` |
 | Talk | *3D Thematic Mapping in R with tmap v4 and tmap.mapgl* (A5, Spatial and Small Area Analysis) | Fri 20 Nov, 13:45–15:15, Room 1 | `talk.qmd` |
 
 ## Setup
@@ -18,10 +18,10 @@ All data used ship with **tmap** (`NLD_prov`, `NLD_muni`, `NLD_dist`, `World`): 
 
 ## Tutorial outline (90 min)
 
-1. **tmap in a nutshell**: grammar, map variables, scales, classification, facets (exercise 1)
-2. **Colours with cols4all**: palette types, colour-blind friendliness, diverging palettes, house-style palettes (exercise 2)
-3. **Mapping official statistics**: rates vs. counts, bubbles, cartograms, bivariate choropleths, donut maps, publication layout and styles (exercise 3)
-4. **Interactive and 3D maps**: view mode, popups, tmap.mapgl, `tm_polygons_3d()` (exercise 4)
+1. **tmap in a nutshell**: grammar, map variables, scales, classification, facets (exercise 1, 30 min)
+2. **Colours with cols4all**: palette types, colour-blind friendliness, diverging palettes, house-style palettes
+3. **Mapping official statistics**: rates vs. counts, bubbles, cartograms, donut maps, publication layout and styles (exercise 2: bubble map)
+4. **Interactive and 3D maps**: view mode, popups, tmap.mapgl, `tm_polygons_3d()` (exercise 3: 3D map)
 
 ## Rendering
 

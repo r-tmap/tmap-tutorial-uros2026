@@ -1,6 +1,6 @@
 ---
 title: "3D Thematic Mapping in R with tmap v4 and tmap.mapgl"
-subtitle: "uRos2026 [Session A5: Spatial and Small Area Analysis]{.gap}<br>Paris, 20 November 2026"
+subtitle: "uRos2026 [Session B5: Spatial and Small Area Analysis]{.gap}<br>Paris, 20 November 2026"
 author:
   - name: "Martijn Tennekes"
     affiliation: "Statistics Netherlands (CBS)"

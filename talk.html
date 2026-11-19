@@ -194,8 +194,8 @@
     <div class="slides">
 
 <section id="title-slide" data-background-image="figures/cbs_logo_en.svg" data-background-position="96% 92%" data-background-size="220px" class="quarto-title-block center">
-  <h1 class="title">3D Thematic Mapping in R with tmap v4 and tmap.mapgl</h1>
-  <p class="subtitle">uRos2026 <span class="gap">Session B5: Spatial and Small Area Analysis</span><br>Paris, 20 November 2026</p>
+  <h1 class="title">3D Thematic Mapping in R<br>with tmap v4 and tmap.mapgl</h1>
+  <p class="subtitle">uRos2026 · Session B5: Spatial and Small Area Analysis · Paris, 20 November 2026</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -433,33 +433,34 @@ Martijn Tennekes
 <p><span class="smaller-body">Height = density → <strong>volume = count</strong></span> <span class="smaller-body gap">colour free for a second variable</span></p>
 </section></section>
 <section>
-<section id="example-1-population" class="title-slide slide level1 center">
-<h1>Example 1: population</h1>
-
+<section id="exploring-height-as-the-primary-map-variable" class="title-slide slide level1 center">
+<h1>Exploring <code>height</code> as the primary map variable</h1>
+<p><span class="section-sub">Example 1: population</span></p>
 </section>
 <section id="worldpop" class="slide level2">
 <h2>WorldPop</h2>
-<div class="columns">
-<div class="column" style="width:36%;">
-<ul>
-<li>Gridded population, <strong>global</strong>, 2025</li>
-<li><strong>30″ × 30″</strong> cells</li>
-<li>So: aggregate <strong>density</strong> (1a) or <strong>equal-area</strong> grid (1b)</li>
-<li>Open data: CC BY 4.0, <a href="https://www.worldpop.org">worldpop.org</a></li>
-</ul>
-</div><div class="column" style="width:64%;">
-<p><img data-src="figures/worldpop_grid.png" style="width:100%;"></p>
+<p><img data-src="figures/worldpop_grid.png" style="width:100%; display:block;"></p>
+<div class="columns wp-captions">
+<div class="column" style="width:48%;">
+<p><strong>WorldPop</strong>: gridded population, global, 2025 (<a href="https://www.worldpop.org">worldpop.org</a>)</p>
+<p>Lon/lat grid: cells get narrower towards the poles</p>
+</div><div class="column" style="width:26%;">
+<p><strong>Microdata</strong>: cells of 30 arc seconds</p>
+<p>0.93 × 0.93 km at the equator<br>0.61 × 0.93 km in Paris</p>
+</div><div class="column" style="width:26%;">
+<p><strong>Aggregated</strong>: 64 × 64 microdata cells, for the next map</p>
+<p>Colour: inhabitants per km²</p>
 </div></div>
 </section>
 <section id="a.-the-world" class="slide level2 nostretch">
 <h2>1a. The world</h2>
-<iframe data-src="maps/world_globe.html" width="100%" height="510px" style="border:none;">
+<iframe data-src="maps/world_globe.html" width="100%" height="570px" style="border:none;">
 </iframe>
 <p><span class="smaller-body">~60 km cells</span> <span class="smaller-body gap">height and colour: inhabitants per km²</span> <span class="smaller-body gap">globe projection</span></p>
 </section>
 <section id="b.-europe" class="slide level2 nostretch">
 <h2>1b. Europe</h2>
-<iframe data-src="maps/europe_10km.html" width="100%" height="510px" style="border:none;">
+<iframe data-src="maps/europe_10km.html" width="100%" height="570px" style="border:none;">
 </iframe>
 <p><span class="smaller-body">10 km equal-area grid (LAEA)</span> <span class="smaller-body gap">hover over a city</span></p>
 </section>
@@ -480,29 +481,36 @@ Martijn Tennekes
 </div></div>
 </section></section>
 <section>
-<section id="new-in-tmap-patterns-and-textures" class="title-slide slide level1 center">
-<h1>New in tmap: patterns and textures</h1>
-
+<section id="taking-population-density-into-account" class="title-slide slide level1 center">
+<h1>Taking population density into account</h1>
+<p><span class="section-sub">New in tmap: patterns and textures</span></p>
 </section>
-<section id="patterns" class="slide level2">
-<h2>Patterns</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
+<section id="patterns-categories" class="slide level2">
+<h2>Patterns: categories</h2>
+<div class="columns pt-slide">
+<div class="column" style="width:42%;">
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_polygons</span>(</span>
 <span id="cb8-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">fill =</span> <span class="st">"white"</span>,</span>
 <span id="cb8-3"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">pattern =</span> <span class="st">"name"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</div><div class="column" style="width:58%;">
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="talk_files/figure-revealjs/pat-names-1.png" class="quarto-figure quarto-figure-center" width="750"></p>
+<p><img data-src="talk_files/figure-revealjs/pat-names-1.png" class="quarto-figure quarto-figure-center" width="840"></p>
 </figure>
 </div>
 </div>
 </div>
-</div><div class="column" style="width:50%;">
+</div></div>
+<p><span class="smaller-body">New map variables: <code>pattern</code>, <code>pattern_col</code>, <code>pattern_density</code>, <code>pattern_size</code></span></p>
+</section>
+<section id="patterns-density" class="slide level2">
+<h2>Patterns: density</h2>
+<div class="columns pt-slide">
+<div class="column" style="width:42%;">
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_polygons</span>(</span>
 <span id="cb9-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">fill =</span> <span class="st">"employment_rate"</span>,</span>
@@ -512,24 +520,26 @@ Martijn Tennekes
 <span id="cb9-6"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">pattern =</span> <span class="st">"dots"</span>,</span>
 <span id="cb9-7"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">pattern_density =</span> <span class="st">"pop_dens"</span>,</span>
 <span id="cb9-8"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">pattern_density.scale =</span></span>
-<span id="cb9-9"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_scale_intervals</span>(<span class="at">style =</span> <span class="st">"quantile"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-9"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_scale_intervals</span>(</span>
+<span id="cb9-10"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="at">style =</span> <span class="st">"quantile"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</div><div class="column" style="width:58%;">
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="talk_files/figure-revealjs/pat-dots-dens-1.png" class="quarto-figure quarto-figure-center" width="750"></p>
+<p><img data-src="talk_files/figure-revealjs/pat-dots-dens-1.png" class="quarto-figure quarto-figure-center" width="840"></p>
 </figure>
 </div>
 </div>
 </div>
 </div></div>
-<p><span class="smaller-body">New map variables: <code>pattern</code>, <code>pattern_col</code>, <code>pattern_density</code>, <code>pattern_size</code></span></p>
+<p><span class="smaller-body">More dots = higher population density</span></p>
 </section>
-<section id="textures" class="slide level2">
-<h2>Textures</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
+<section id="textures-mottle" class="slide level2">
+<h2>Textures: <code>"mottle"</code></h2>
+<div class="columns pt-slide">
+<div class="column" style="width:42%;">
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_polygons</span>(</span>
 <span id="cb10-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">fill =</span> <span class="st">"employment_rate"</span>,</span>
@@ -542,16 +552,23 @@ Martijn Tennekes
 <span id="cb10-9"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">pattern_density.scale =</span></span>
 <span id="cb10-10"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_scale_ordinal</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</div><div class="column" style="width:58%;">
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="talk_files/figure-revealjs/tex-mottle-urb-1.png" class="quarto-figure quarto-figure-center" width="750"></p>
+<p><img data-src="talk_files/figure-revealjs/tex-mottle-urb-1.png" class="quarto-figure quarto-figure-center" width="840"></p>
 </figure>
 </div>
 </div>
 </div>
-</div><div class="column" style="width:50%;">
+</div></div>
+<p><span class="smaller-body">Idea: texture = <strong>uncertainty</strong></span> <span class="smaller-body gap">colour stays readable</span></p>
+</section>
+<section id="textures-sketch" class="slide level2">
+<h2>Textures: <code>"sketch"</code></h2>
+<div class="columns pt-slide">
+<div class="column" style="width:42%;">
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_polygons</span>(</span>
 <span id="cb11-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">fill =</span> <span class="st">"employment_rate"</span>,</span>
@@ -561,63 +578,63 @@ Martijn Tennekes
 <span id="cb11-6"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">pattern =</span> <span class="st">"sketch"</span>,</span>
 <span id="cb11-7"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">pattern_density =</span> <span class="st">"urbanity"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</div><div class="column" style="width:58%;">
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="talk_files/figure-revealjs/tex-sketch-urb-1.png" class="quarto-figure quarto-figure-center" width="750"></p>
+<p><img data-src="talk_files/figure-revealjs/tex-sketch-urb-1.png" class="quarto-figure quarto-figure-center" width="840"></p>
 </figure>
 </div>
 </div>
 </div>
 </div></div>
-<p><span class="smaller-body">Idea: texture = <strong>uncertainty</strong></span> <span class="smaller-body gap">colour stays readable</span> <span class="smaller-body gap">all modes, also 3D roofs</span></p>
+<p><span class="smaller-body">Idea: texture = <strong>uncertainty</strong></span> <span class="smaller-body gap">all modes, also 3D roofs</span></p>
 </section></section>
 <section>
-<section id="example-2-health" class="title-slide slide level1 center">
-<h1>Example 2: health</h1>
-
+<section id="showing-a-data-variable-taking-1-population-density-and-2-uncertainty-into-account" class="title-slide slide level1 center">
+<h1>Showing a data variable, taking (1) population density and (2) uncertainty into account</h1>
+<p><span class="section-sub">Example 2: health (small area estimates)</span></p>
 </section>
 <section id="health-per-district" class="slide level2">
 <h2>Health per district</h2>
-<ul>
-<li><strong>Health Monitor Adults and Elderly 2024</strong> (Municipal Health Services, CBS, RIVM)</li>
-<li>% adults with <strong>good or very good</strong> health</li>
-<li><strong>Model-based</strong> small area estimates, <strong>3,393 districts</strong></li>
-<li>With <strong>95% intervals</strong>: wide for small districts</li>
-</ul>
-<table class="mapvars caption-top" data-quarto-postprocess="true">
-<tbody>
-<tr class="odd">
-<td rowspan="2">Map variables:</td>
-<td><code>height</code></td>
-<td>=</td>
-<td>population density</td>
-</tr>
-<tr class="even">
-<td><code>fill</code></td>
-<td>=</td>
-<td>difference with the Dutch average</td>
-</tr>
-</tbody>
-</table>
+<p><span class="smaller-body"><strong>Small area estimates</strong>: % adults in (very) good health, <strong>3,393 districts</strong>, with 95% intervals</span><br> <span class="hd-source">Health Monitor Adults and Elderly 2024 (Municipal Health Services, CBS, RIVM)</span></p>
+<div class="mapflow">
+  <div class="mf-head"><div>data variable</div><div></div><div>map variable</div></div>
+  <div class="mf-row">
+    <div class="mf-data">% in good health<small>difference with the Dutch average</small></div>
+    <div class="mf-arrow">→</div>
+    <div class="mf-var"><code>fill</code><small>colour</small></div>
+  </div>
+  <div class="mf-row mf-1">
+    <div class="mf-data"><span class="mf-num">1</span>Population density<small>inhabitants per km²</small></div>
+    <div class="mf-arrow">→</div>
+    <div class="mf-var"><code>height</code><small>3D</small></div>
+  </div>
+  <div class="mf-row mf-2">
+    <div class="mf-data"><span class="mf-num">2</span>Uncertainty<small>width of the 95% interval</small></div>
+    <div class="mf-arrow">→</div>
+    <div class="mf-var"><code>pattern_density</code><small>texture</small></div>
+  </div>
+</div>
 </section>
 <section id="a.-height-colour" class="slide level2 nostretch">
 <h2>2a. Height + colour</h2>
-<iframe data-src="maps/nld_health.html" width="100%" height="545px" style="border:none;">
+<iframe data-src="maps/nld_health.html" width="100%" height="570px" style="border:none;">
 </iframe>
+<p><span class="smaller-body">(1) Population density: height</span> <span class="smaller-body gap">Colour: difference with the Dutch average</span></p>
 </section>
 <section id="b.-texture-mottle" class="slide level2 nostretch">
 <h2>2b. + texture <code>"mottle"</code></h2>
-<iframe data-src="maps/nld_health_mottle.html" width="100%" height="545px" style="border:none;">
+<iframe data-src="maps/nld_health_mottle.html" width="100%" height="570px" style="border:none;">
 </iframe>
-<p><span class="smaller-body">Wider interval → more ‘poorly painted’ roof</span> <span class="smaller-body gap">Average colour unchanged</span></p>
+<p><span class="smaller-body">(2) Uncertainty: wider interval → more ‘poorly painted’ roof</span> <span class="smaller-body gap">Average colour unchanged</span></p>
 </section>
 <section id="c.-texture-sketch" class="slide level2 nostretch">
 <h2>2c. + texture <code>"sketch"</code></h2>
-<iframe data-src="maps/nld_health_sketch.html" width="100%" height="545px" style="border:none;">
+<iframe data-src="maps/nld_health_sketch.html" width="100%" height="570px" style="border:none;">
 </iframe>
-<p><span class="smaller-body">Wider interval → sketchier roof</span></p>
+<p><span class="smaller-body">(2) Uncertainty: wider interval → sketchier roof</span></p>
 </section>
 <section id="thank-you" class="slide level2">
 <h2>Thank you</h2>
@@ -845,6 +862,14 @@ Martijn Tennekes
           RevealZoom
         ]
       });
+    </script>
+    <!-- 'Joint work with ...' block on the title slide (Quarto's revealjs title slide has no field for it) -->
+    <script>
+    document.querySelector('#title-slide').insertAdjacentHTML('beforeend',
+      '<div class="joint-work"><div class="jw-head">Joint work with</div>' +
+      '<div><span class="jw-name">Jakub Nowosad</span> and many others <span class="jw-topic">software</span></div>' +
+      '<div><span class="jw-name">Edwin de Jonge</span> and <span class="jw-name">Harm Jan Boonstra</span> <span class="jw-topic">uncertainty visualization</span></div>' +
+      '</div>');
     </script>
     
     <script>

@@ -1,6 +1,6 @@
 ---
-title: "3D Thematic Mapping in R with tmap v4 and tmap.mapgl"
-subtitle: "uRos2026 [Session B5: Spatial and Small Area Analysis]{.gap}<br>Paris, 20 November 2026"
+title: "3D Thematic Mapping in R<br>with tmap v4 and tmap.mapgl"
+subtitle: "uRos2026 · Session B5: Spatial and Small Area Analysis · Paris, 20 November 2026"
 author:
   - name: "Martijn Tennekes"
     affiliation: "Statistics Netherlands (CBS)"
@@ -18,6 +18,7 @@ format:
     menu: false
     code-line-numbers: false
     css: style/style.css
+    include-after-body: style/joint-work.html
 execute:
   echo: false
   warning: false
@@ -217,32 +218,41 @@ tm_shape(NLD_muni) +
 
 [Height = density → **volume = count**]{.smaller-body} [colour free for a second variable]{.smaller-body .gap}
 
-# Example 1: population
+# Exploring `height` as the primary map variable
+
+[Example 1: population]{.section-sub}
 
 ## WorldPop
 
-:::: {.columns}
-::: {.column width="36%"}
-- Gridded population, **global**, 2025
-- **30″ × 30″** cells
-- So: aggregate **density** (1a) or **equal-area** grid (1b)
-- Open data: CC BY 4.0, [worldpop.org](https://www.worldpop.org)
+![](figures/worldpop_grid.png){style="width:100%; display:block;"}
+
+:::: {.columns .wp-captions}
+::: {.column width="48%"}
+**WorldPop**: gridded population, global, 2025 ([worldpop.org](https://www.worldpop.org))
+
+Lon/lat grid: cells get narrower towards the poles
 :::
-::: {.column width="64%"}
-![](figures/worldpop_grid.png){style="width:100%;"}
+::: {.column width="26%"}
+**Microdata**: cells of 30 arc seconds
+
+0.93 × 0.93 km at the equator<br>0.61 × 0.93 km in Paris
+:::
+::: {.column width="26%"}
+**Aggregated**: 64 × 64 microdata cells, for the next map
+
+Colour: inhabitants per km²
 :::
 ::::
 
-
 ## 1a. The world {.nostretch}
 
-<iframe data-src="maps/world_globe.html" width="100%" height="510px" style="border:none;"></iframe>
+<iframe data-src="maps/world_globe.html" width="100%" height="570px" style="border:none;"></iframe>
 
 [~60 km cells]{.smaller-body} [height and colour: inhabitants per km²]{.smaller-body .gap} [globe projection]{.smaller-body .gap}
 
 ## 1b. Europe {.nostretch}
 
-<iframe data-src="maps/europe_10km.html" width="100%" height="510px" style="border:none;"></iframe>
+<iframe data-src="maps/europe_10km.html" width="100%" height="570px" style="border:none;"></iframe>
 
 [10 km equal-area grid (LAEA)]{.smaller-body} [hover over a city]{.smaller-body .gap}
 
@@ -265,23 +275,34 @@ tm_shape(urban) +
 :::
 ::::
 
-# New in tmap: patterns and textures
+# Taking population density into account
 
-## Patterns
+[New in tmap: patterns and textures]{.section-sub}
 
-:::: {.columns}
-::: {.column width="50%"}
+## Patterns: categories
+
+:::: {.columns .pt-slide}
+::: {.column width="42%"}
 ```{r, echo = TRUE, eval = FALSE}
 tm_polygons(
   fill = "white",
   pattern = "name")
 ```
-```{r pat-names, fig.width = 5, fig.height = 2.9}
+:::
+::: {.column width="58%"}
+```{r pat-names, fig.width = 5.6, fig.height = 4.6}
 tm_shape(NLD_prov) +
   tm_polygons(fill = "white", pattern = "name", pattern.legend = tm_legend_hide())
 ```
 :::
-::: {.column width="50%"}
+::::
+
+[New map variables: `pattern`, `pattern_col`, `pattern_density`, `pattern_size`]{.smaller-body}
+
+## Patterns: density
+
+:::: {.columns .pt-slide}
+::: {.column width="42%"}
 ```{r, echo = TRUE, eval = FALSE}
 tm_polygons(
   fill = "employment_rate",
@@ -291,9 +312,12 @@ tm_polygons(
   pattern = "dots",
   pattern_density = "pop_dens",
   pattern_density.scale =
-    tm_scale_intervals(style = "quantile"))
+    tm_scale_intervals(
+      style = "quantile"))
 ```
-```{r pat-dots-dens, fig.width = 5, fig.height = 2.7}
+:::
+::: {.column width="58%"}
+```{r pat-dots-dens, fig.width = 5.6, fig.height = 4.6}
 tm_shape(NLD_muni) +
   tm_polygons(fill = "employment_rate", fill.scale = tm_scale(values = "-kovesi.bu_wh_rd", values.range = c(0.3, 0.8)), pattern = "dots", pattern_density = "pop_dens",
     pattern_density.scale = tm_scale_intervals(style = "quantile"), lwd = 0.5) +
@@ -302,12 +326,12 @@ tm_shape(NLD_muni) +
 :::
 ::::
 
-[New map variables: `pattern`, `pattern_col`, `pattern_density`, `pattern_size`]{.smaller-body}
+[More dots = higher population density]{.smaller-body}
 
-## Textures
+## Textures: `"mottle"`
 
-:::: {.columns}
-::: {.column width="50%"}
+:::: {.columns .pt-slide}
+::: {.column width="42%"}
 ```{r, echo = TRUE, eval = FALSE}
 tm_polygons(
   fill = "employment_rate",
@@ -320,7 +344,9 @@ tm_polygons(
   pattern_density.scale =
     tm_scale_ordinal(values = c(1, 0)))
 ```
-```{r tex-mottle-urb, fig.width = 5, fig.height = 2.9}
+:::
+::: {.column width="58%"}
+```{r tex-mottle-urb, fig.width = 5.6, fig.height = 4.6}
 tm_shape(NLD_muni) +
   tm_polygons(fill = "employment_rate", fill.scale = tm_scale(values = "-kovesi.bu_wh_rd", values.range = c(0.3, 0.8)), pattern = tm_patterns("mottle", grain = 0.15, contrast = 1.5), pattern_density = "urbanity",
     pattern_density.scale = tm_scale_ordinal(values = c(1, 0)),
@@ -328,7 +354,14 @@ tm_shape(NLD_muni) +
   tm_layout(legend.position = tm_pos_out("right", "center"))
 ```
 :::
-::: {.column width="50%"}
+::::
+
+[Idea: texture = **uncertainty**]{.smaller-body} [colour stays readable]{.smaller-body .gap}
+
+## Textures: `"sketch"`
+
+:::: {.columns .pt-slide}
+::: {.column width="42%"}
 ```{r, echo = TRUE, eval = FALSE}
 tm_polygons(
   fill = "employment_rate",
@@ -338,7 +371,9 @@ tm_polygons(
   pattern = "sketch",
   pattern_density = "urbanity")
 ```
-```{r tex-sketch-urb, fig.width = 5, fig.height = 2.9}
+:::
+::: {.column width="58%"}
+```{r tex-sketch-urb, fig.width = 5.6, fig.height = 4.6}
 tm_shape(NLD_muni) +
   tm_polygons(fill = "employment_rate", fill.scale = tm_scale(values = "-kovesi.bu_wh_rd", values.range = c(0.3, 0.8)), pattern = "sketch", pattern_density = "urbanity",
     lwd = 0.5) +
@@ -347,39 +382,55 @@ tm_shape(NLD_muni) +
 :::
 ::::
 
-[Idea: texture = **uncertainty**]{.smaller-body} [colour stays readable]{.smaller-body .gap} [all modes, also 3D roofs]{.smaller-body .gap}
+[Idea: texture = **uncertainty**]{.smaller-body} [all modes, also 3D roofs]{.smaller-body .gap}
 
-# Example 2: health
+# Showing a data variable, taking (1) population density and (2) uncertainty into account
+
+[Example 2: health (small area estimates)]{.section-sub}
 
 ## Health per district
 
-- **Health Monitor Adults and Elderly 2024** (Municipal Health Services, CBS, RIVM)
-- % adults with **good or very good** health
-- **Model-based** small area estimates, **3,393 districts**
-- With **95% intervals**: wide for small districts
+[**Small area estimates**: % adults in (very) good health, **3,393 districts**, with 95% intervals]{.smaller-body}<br>
+[Health Monitor Adults and Elderly 2024 (Municipal Health Services, CBS, RIVM)]{.hd-source}
 
 ```{=html}
-<table class="mapvars">
-<tr><td rowspan="2">Map variables:</td><td><code>height</code></td><td>=</td><td>population density</td></tr>
-<tr><td><code>fill</code></td><td>=</td><td>difference with the Dutch average</td></tr>
-</table>
+<div class="mapflow">
+  <div class="mf-head"><div>data variable</div><div></div><div>map variable</div></div>
+  <div class="mf-row">
+    <div class="mf-data">% in good health<small>difference with the Dutch average</small></div>
+    <div class="mf-arrow">&rarr;</div>
+    <div class="mf-var"><code>fill</code><small>colour</small></div>
+  </div>
+  <div class="mf-row mf-1">
+    <div class="mf-data"><span class="mf-num">1</span>Population density<small>inhabitants per km²</small></div>
+    <div class="mf-arrow">&rarr;</div>
+    <div class="mf-var"><code>height</code><small>3D</small></div>
+  </div>
+  <div class="mf-row mf-2">
+    <div class="mf-data"><span class="mf-num">2</span>Uncertainty<small>width of the 95% interval</small></div>
+    <div class="mf-arrow">&rarr;</div>
+    <div class="mf-var"><code>pattern_density</code><small>texture</small></div>
+  </div>
+</div>
 ```
 
 ## 2a. Height + colour {.nostretch}
 
-<iframe data-src="maps/nld_health.html" width="100%" height="545px" style="border:none;"></iframe>
+<iframe data-src="maps/nld_health.html" width="100%" height="570px" style="border:none;"></iframe>
+
+[(1) Population density: height]{.smaller-body} [Colour: difference with the Dutch average]{.smaller-body .gap}
 
 ## 2b. + texture `"mottle"` {.nostretch}
 
-<iframe data-src="maps/nld_health_mottle.html" width="100%" height="545px" style="border:none;"></iframe>
+<iframe data-src="maps/nld_health_mottle.html" width="100%" height="570px" style="border:none;"></iframe>
 
-[Wider interval → more 'poorly painted' roof]{.smaller-body} [Average colour unchanged]{.smaller-body .gap}
+[(2) Uncertainty: wider interval → more 'poorly painted' roof]{.smaller-body} [Average colour unchanged]{.smaller-body .gap}
 
 ## 2c. + texture `"sketch"` {.nostretch}
 
-<iframe data-src="maps/nld_health_sketch.html" width="100%" height="545px" style="border:none;"></iframe>
+<iframe data-src="maps/nld_health_sketch.html" width="100%" height="570px" style="border:none;"></iframe>
 
-[Wider interval → sketchier roof]{.smaller-body}
+[(2) Uncertainty: wider interval → sketchier roof]{.smaller-body}
 
 ## Thank you
 
